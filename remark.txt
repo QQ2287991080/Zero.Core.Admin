@@ -1,0 +1,6 @@
+npm install axios
+npm install bootstrap-vue
+npm install clipboard
+npm install element-ui
+npm install js-cookie
+npm install qs
