@@ -3,7 +3,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-//import './unit/promission'
+import './utils/promission'
+import './utils/global'
 //#endregion
 
 //#region  第三方插件
