@@ -2,6 +2,9 @@ npm install axios
 npm install bootstrap-vue
 npm install clipboard
 npm install element-ui
-npm install js-cookie
-npm install qs
-npm install svg-sprite-loader
+npm install js-cookie 
+npm install qs //序列化数据
+npm install svg-sprite-loader //svg图片加载
+npm install --save nprogress //进度条
+
+

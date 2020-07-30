@@ -27,21 +27,41 @@ const routes = [
   {
     path: '',
     component: Layout,
-    name: 'icon',
+    name: '系统设置',
     meta: {
-      title: '图标',
-      icon: 'icon',
+      title: '系统设置',
+      icon: 'el-icon-setting',
     },
     children: [
       {
         path: '/svg-icons',
-        component: () => import('@/views/svg-icons/index'),
+        component: () => import('@/views/svg-icons'),
         meta: {
-          title: '图标',
+          title: '图标1',
+          icon: 'dashboard',
+        },
+      },
+      {
+        path: '/svg-icon2',
+        //component: () => import('@/views/svg-icons'),
+        meta: {
+          title: '图标2',
           icon: 'dashboard',
         },
       },
     ],
+  },
+  {
+    path: '/401',
+    component: () => import('@/views/errorPage/401'),
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/errorPage/404'),
+  },
+  {
+    path: '*',
+    redirect: '/404',
   },
 ]
 
