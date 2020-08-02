@@ -8,8 +8,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 //设置element ui大小
-Vue.prototype.$ELEMENT = { size: 'small', zIndex: 3000 }
-Vue.use(ElementUI)
+Vue.use(ElementUI, { size: 'small', zIndex: 3000 })
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 export default Vue

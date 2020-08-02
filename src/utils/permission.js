@@ -1,74 +1,27 @@
 import router from '../router'
+import { getToken } from './auth'
 //import Layout from '@/views/layout'
 
-var getRouter //用来获取后台拿到的路由
-
+//用户token凭证
+var token = getToken()
 router.beforeEach((to, from, next) => {
-  console.log('路由')
-  if (!getRouter) {
-    //不加这个判断，路由会陷入死循环
-    if (!getObjArr('router')) {
-      getRouter = router.options.routes
-      console.log('beforeEach  getRouter')
-      //getRouter = fakeRouter.router //假装模拟后台请求得到的路由数据
-      //saveObjArr('router', getRouter) //存储路由到localStorage
-      // getRouter = fakeRouter.router
-      routerGo(to, next) //执行路由跳转方法
-      // })
+  //如果token存在
+  if (token) {
+    //如果想要手动跳转到登录，不允许重定向到首页
+    if (to.path === '/login') {
+      next({ path: '/' })
     } else {
-      //从localStorage拿到了路由
-      getRouter = getObjArr('router') //拿到路由
-      routerGo(to, next)
+      //获取注册的路由
+      var routers = router.routes
+      console.log(routers)
+      router.addRoutes(routers)
+      next({ ...to, replace: true })
     }
   } else {
-    next()
+    if (to.path === '/login') {
+      next()
+    } else {
+      next(`/login?redirect=${to.path}`)
+    }
   }
 })
-
-function routerGo(to, next) {
-  console.log('routerGo')
-  getRouter = filterAsyncRouter(getRouter) //过滤路由
-
-  router.addRoutes(getRouter) //动态添加路由
-  global.antRouter = getRouter //将路由数据传递给全局变量，做侧边栏菜单渲染工作
-  next({ ...to, replace: true })
-}
-
-function saveObjArr(name, data) {
-  //localStorage 存储数组对象的方法
-  localStorage.setItem(name, JSON.stringify(data))
-}
-
-function getObjArr(name) {
-  //localStorage 获取数组对象的方法
-  return JSON.parse(window.localStorage.getItem(name))
-}
-
-function filterAsyncRouter(asyncRouterMap) {
-  console.log(asyncRouterMap)
-  const accessedRouters = asyncRouterMap.filter((item) => {
-    return item
-  })
-  return accessedRouters
-}
-// function filterAsyncRouter(asyncRouterMap) {
-//   //遍历后台传来的路由字符串，转换为组件对象
-//   console.log('======================')
-//   console.log(getRouter)
-//   const accessedRouters = asyncRouterMap.filter((route) => {
-//     if (route.component) {
-//       if (route.component === 'Layout') {
-//         //Layout组件特殊处理
-//         route.component = Layout
-//       } else {
-//         route.component = _import(route.component)
-//       }
-//     }
-//     if (route.children && route.children.length) {
-//       route.children = filterAsyncRouter(route.children)
-//     }
-//     return true
-//   })
-
-//   return accessedRouters
-// }

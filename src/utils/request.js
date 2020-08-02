@@ -1,7 +1,7 @@
 import router from '../router'
 import axios from 'axios'
 import { Message } from 'element-ui'
-import { showLoading, hiddenLoading } from '../utils/Loading'
+import { showLoading, hiddenLoading } from '../utils/loading'
 import { getToken } from './auth'
 //element alert 窗口
 const Tips = (msg, type) => {
@@ -13,7 +13,7 @@ const Tips = (msg, type) => {
 }
 //跳转登录页
 const login = () => {
-  router.replace('/')
+  router.push('/')
 }
 
 //创建axios实例

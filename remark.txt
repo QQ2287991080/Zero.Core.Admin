@@ -8,3 +8,9 @@ npm install svg-sprite-loader //svg图片加载
 npm install --save nprogress //进度条
 
 
+
+
+
+动态路由：
+首先获取当前用户的菜单，
+通过遍历菜单去展示当前用户的菜单，从而实现动态权限

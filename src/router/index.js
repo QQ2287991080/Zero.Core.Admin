@@ -5,13 +5,13 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '',
+    path: '/',
     component: Layout,
-    redirect: 'dashboard',
+    redirect: '/dashboard',
     name: '首页✌',
     meta: {
       title: '首页',
-      icon: 'dashboard',
+      icon: '/dashboard',
     },
     children: [
       {
@@ -25,7 +25,7 @@ const routes = [
     ],
   },
   {
-    path: '',
+    path: '/setting',
     component: Layout,
     name: '系统设置',
     meta: {
@@ -50,6 +50,11 @@ const routes = [
         },
       },
     ],
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/login'),
   },
   {
     path: '/401',
