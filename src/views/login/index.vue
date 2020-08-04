@@ -28,8 +28,6 @@ export default {
   data() {
     //验证用户名
     const validateName = (rule, value, callback) => {
-      console.log(value);
-      console.log();
       if (value.replace(/\s/gi, "").length === 0) {
         callback(new Error("请输入用户名"));
       }
@@ -81,6 +79,9 @@ export default {
       this.$refs[formName].validate((valid) => {
         //验证表达是否通过
         if (valid) {
+          console.log(this.loginForm);
+          var result = this.$store.dispatch("login", this.loginForm);
+          console.log(result);
           alert("submit!");
           this.$router.push("/");
         } else {
