@@ -3,20 +3,16 @@ import VueRouter from 'vue-router'
 import Layout from '@/views/layout'
 Vue.use(VueRouter)
 
-const routes = [
+export const routes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
-    name: '首页✌',
-    meta: {
-      title: '首页',
-      icon: '/dashboard',
-    },
+    //redirect: '/dashboard',
     children: [
       {
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
+        name: 'Dashboard',
         meta: {
           title: '首页',
           icon: 'dashboard',
@@ -25,9 +21,9 @@ const routes = [
     ],
   },
   {
-    path: '/setting',
+    path: '/svg-icons',
     component: Layout,
-    name: '系统设置',
+    //name: '系统设置',
     meta: {
       title: '系统设置',
       icon: 'el-icon-setting',
@@ -43,7 +39,7 @@ const routes = [
       },
       {
         path: '/svg-icon2',
-        //component: () => import('@/views/svg-icons'),
+        component: () => import('@/views/svg-icons'),
         meta: {
           title: '图标2',
           icon: 'dashboard',
@@ -53,7 +49,7 @@ const routes = [
   },
   {
     path: '/login',
-    name: 'login',
+    //name: 'login',
     component: () => import('@/views/login'),
   },
   {

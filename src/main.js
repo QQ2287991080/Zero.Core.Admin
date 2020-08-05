@@ -4,7 +4,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './utils/permission'
-import './utils/global'
+//import './utils/global'
 //#endregion
 
 //#region  第三方插件

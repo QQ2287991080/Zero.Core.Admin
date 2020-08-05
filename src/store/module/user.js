@@ -38,17 +38,17 @@ const actions = {
   //登录
   login({ commit }, userInfo) {
     console.log('********登录表单********')
-    console.log(userInfo)
     const { userName, password } = userInfo
     //https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise
     return new Promise((resolve, reject) => {
       //调用登录接口接口
-      Login({ userName: userName, password: password })
+      //{ userName: userName, password: password }
+      var loginForm = { userName: userName, password: password }
+      Login(loginForm)
         .then((res) => {
-          const { data } = res
+          const { data } = res.data
           //token
-          commit('SET_TOKEN', data.token)
-          setToken(data.token)
+          //setToken(data.token)
           resolve()
         })
         .catch((err) => {
@@ -62,7 +62,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       //获取用户详情
       GetUserInfo().then((res) => {
-        const { data } = res
+        const { data } = res.data
         //头像
         commit('SET_AVATAR', data.avatar)
         //真实姓名
@@ -83,9 +83,8 @@ const actions = {
       //调用退出登录接口
       LoginOut()
         .then((res) => {
-          if (res.data.statuCode === 200) {
+          if (res.data.data.statuCode === 200) {
             //token
-            commit('SET_TOKEN', '')
             removeToekn()
             //头像
             commit('SET_AVATAR', '')

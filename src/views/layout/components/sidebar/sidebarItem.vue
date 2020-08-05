@@ -39,8 +39,8 @@
                 :routes="[child]"
                 :key="child.path"
               ></sidebar-item>
-              <router-link v-else :to="item.path+child.path" :key="child.name">
-                <el-menu-item :index="item.path+child.path">
+              <router-link v-else :to="child.path" :key="child.name">
+                <el-menu-item :index="child.path">
                   <!-- <i class="child.icon" /> -->
                   <span v-if="child.meta&&child.meta.title">{{child.meta.title}}</span>
                 </el-menu-item>

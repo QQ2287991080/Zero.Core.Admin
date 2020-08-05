@@ -46,11 +46,11 @@ export default {
     };
     return {
       loginForm: {
-        password: "",
-        userName: "",
-        redirect: undefined,
-        otherQuery: {},
+        password: "123456",
+        userName: "admin",
       },
+      redirect: undefined,
+      otherQuery: {},
       rules: {
         password: [{ validator: validatePass, trigger: "blur" }],
         userName: [{ validator: validateName, trigger: "blur" }],
@@ -62,16 +62,16 @@ export default {
      *监听$route对象的变化，改变浏览器搜索框中的值
      *https://router.vuejs.org/zh/guide/essentials/dynamic-matching.html#%E5%93%8D%E5%BA%94%E8%B7%AF%E7%94%B1%E5%8F%82%E6%95%B0%E7%9A%84%E5%8F%98%E5%8C%96
      */
-    $route: {
-      handler: function (route) {
-        const query = route.query;
-        if (query) {
-          this.redirect = query.redirect;
-          this.otherQuery = this.getOtherQuery(query);
-        }
-      },
-      immediate: true,
-    },
+    // $route: {
+    //   handler: function (route) {
+    //     const query = route.query;
+    //     if (query) {
+    //       this.redirect = query.redirect;
+    //       this.otherQuery = this.getOtherQuery(query);
+    //     }
+    //   },
+    //   immediate: true,
+    // },
   },
   methods: {
     //提交表单
@@ -81,8 +81,10 @@ export default {
         if (valid) {
           console.log(this.loginForm);
           var result = this.$store.dispatch("login", this.loginForm);
-          console.log(result);
-          alert("submit!");
+          // this.$router.push({
+          //   path: this.redirect || "/",
+          //   query: this.otherQuery,
+          // });
           this.$router.push("/");
         } else {
           return false;

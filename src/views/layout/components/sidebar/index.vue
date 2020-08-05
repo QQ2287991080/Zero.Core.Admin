@@ -18,9 +18,8 @@ export default {
   components: { sidebarItem },
   computed: {
     routes() {
-      console.log("****************");
-      console.log(global.antRouter);
-      return global.antRouter;
+      //   console.log(this.$router.options.routes);
+      return this.$router.options.routes;
     },
   },
 };
