@@ -80,12 +80,19 @@ export default {
         //验证表达是否通过
         if (valid) {
           console.log(this.loginForm);
-          var result = this.$store.dispatch("login", this.loginForm);
+          var result = this.$store
+            .dispatch("login", this.loginForm)
+            .then((res) => {
+              console.log(res);
+              if (res.data.statusCode === 200) {
+                this.$router.push("/");
+              }
+            });
           // this.$router.push({
           //   path: this.redirect || "/",
           //   query: this.otherQuery,
           // });
-          this.$router.push("/");
+          //this.$router.push("/");
         } else {
           return false;
         }

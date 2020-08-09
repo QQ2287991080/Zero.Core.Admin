@@ -1,6 +1,5 @@
 import { Login, LoginOut, GetUserInfo } from '@/api/user/index'
 import { setToken, getToken, removeToekn } from '@/utils/auth'
-import router from '@/router'
 //初始化State
 const state = {
   token: '',
@@ -8,6 +7,7 @@ const state = {
   userName: '', //用户名
   avatar: '', //头像
   permission: [],
+  menu: [],
 }
 //mutations 事件
 const mutations = {
@@ -31,6 +31,10 @@ const mutations = {
   SET_PERMISSION: (state, permission) => {
     state.permission = permission
   },
+  //菜单
+  SET_MENU: (state, menu) => {
+    state.menu = menu
+  },
 }
 
 //注册action
@@ -48,8 +52,8 @@ const actions = {
         .then((res) => {
           const { data } = res.data
           //token
-          //setToken(data.token)
-          resolve()
+          setToken(data.token)
+          resolve(res)
         })
         .catch((err) => {
           //错误
@@ -63,6 +67,8 @@ const actions = {
       //获取用户详情
       GetUserInfo().then((res) => {
         const { data } = res.data
+        console.log('now get userInfo ')
+        console.log(data)
         //头像
         commit('SET_AVATAR', data.avatar)
         //真实姓名
@@ -71,6 +77,8 @@ const actions = {
         commit('SET_USERNAME', data.userName)
         //权限
         commit('SET_PERMISSION', data.permission)
+        //菜单
+        commit('SET_MENU', data.menu)
         resolve(data)
       })
     }).catch((err) => {
@@ -94,12 +102,21 @@ const actions = {
             commit('SET_USERNAME', '')
             //权限
             commit('SET_PERMISSION', [])
+            //菜单
+            commit('SET_MENU', [])
           }
           resolve()
         })
         .catch((err) => {
           reject(err)
         })
+    })
+  },
+  //获取用户的菜单
+  menu({ commit }) {
+    GetAllMenu().then((res) => {
+      console.log(res.data.data)
+      commit('SET_MENU'), res.data.data
     })
   },
 }

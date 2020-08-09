@@ -2,7 +2,7 @@ import router from '../router'
 import axios from 'axios'
 import { Message } from 'element-ui'
 import { showLoading, hiddenLoading } from '../utils/loading'
-import { getToken } from './auth'
+import { getToken, removeToken } from './auth'
 //element alert 窗口
 const Tips = (msg, type) => {
   Message({
@@ -13,6 +13,7 @@ const Tips = (msg, type) => {
 }
 //跳转登录页
 const login = () => {
+  removeToken()
   router.push('/')
 }
 
@@ -27,11 +28,12 @@ instance.interceptors.request.use(
     showLoading()
     var token = getToken()
     if (token !== null) {
-      config.headers.Authorization = `Bearer '${token}`
+      config.headers.Authorization = `Bearer ${token}`
     }
     return config
   },
   (err) => {
+    console.log('axios error in request')
     hiddenLoading()
     return Promise.reject(err)
   }
@@ -46,9 +48,11 @@ instance.interceptors.response.use(
     switch (code) {
       case 401:
         //未授权跳转登录页
-        Tips('未授权,请登录！', 'warn')
+        Tips('未授权,请登录！', 'error')
+        console.log('redirect login')
+        removeToken()
         login()
-        break
+        return Promise.reject(response)
       case 400:
         //返回错误信息
         Tips(response.data.msg, 'error')
@@ -62,21 +66,29 @@ instance.interceptors.response.use(
     return Promise.resolve(response)
   },
   (error) => {
-    //console.log(err)
-    //处理请求超时
-    var errConfig = error.config
+    // 超时请求处理
+    var originalRequest = error.config
     if (
-      error.statusCode == 'ECONNABORTED' &&
-      error.msg.indexOf('timeout') != -1 &&
-      !errConfig._retry
+      error.code == 'ECONNABORTED' &&
+      error.message.indexOf('timeout') != -1 &&
+      !originalRequest._retry
     ) {
-      //console.log('请求超时')
-      errConfig._retry = true
-      // return error
+      originalRequest._retry = true
+      return null
     }
+    //处理错误
+    const data = error.response
+    console.log(data)
     hiddenLoading()
+    //授权失败
+    if (data.status === 401) {
+      Tips('身份信息过期，请重新登录。', 'error')
+      login()
+    }
+    console.log('错误信息')
     return Promise.reject(error)
   }
 )
+
 //#endregion
 export default instance

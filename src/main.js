@@ -16,6 +16,10 @@ import './setup/ThirdUI'
 //#endregion
 Vue.config.productionTip = false
 
+// const originalPush = router.prototype.push
+// router.prototype.push = function push(location) {
+//   return originalPush.call(this, location).catch((err) => err)
+// }
 new Vue({
   router,
   store,

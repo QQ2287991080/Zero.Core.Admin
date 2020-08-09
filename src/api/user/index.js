@@ -27,7 +27,16 @@ export function LoginOut() {
  */
 export function GetUserInfo() {
   return request({
-    url: 'api/getUserInfo',
+    url: 'api/user/getUserInfo',
+    method: 'get',
+  })
+}
+/**
+ * 获取用户的菜单权限
+ */
+export function GetAllMenu() {
+  return request({
+    url: 'api/menu/getAllMenu',
     method: 'get',
   })
 }

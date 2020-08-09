@@ -19,6 +19,8 @@ export default {
   computed: {
     routes() {
       //   console.log(this.$router.options.routes);
+
+      //返回菜单
       return this.$router.options.routes;
     },
   },
