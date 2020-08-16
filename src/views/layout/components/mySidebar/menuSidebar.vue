@@ -13,7 +13,7 @@
       <!--没有子级的列表-->
       <!-- <router-link v-if="!(item.menuItems.length!=0)" :to="item.url"
       :key="item.name">-->
-      <el-menu-item v-if="!(item.menuItems.length!=0)" :index="item.url" :key="item.url">
+      <el-menu-item v-if="!(item.children.length!=0)" :index="item.url" :key="item.url">
         <!-- <i :class="item.icon"></i> -->
         <svg-icon :icon-class="item.icon" />
         <span class="111" slot="title">{{item.name}}</span>
@@ -27,11 +27,11 @@
           <span class="222" slot="title">{{item.name}}</span>
         </template>
 
-        <template v-for="child in item.menuItems">
+        <template v-for="child in item.children">
           <!--下面再有子级时进行递归调用-->
           <sidebar-item
             class="nest-menu"
-            v-if="child.menuItems&&child.menuItems.length>0"
+            v-if="child.children&&child.children.length>0"
             :menus="[child]"
             :key="child.id"
           ></sidebar-item>

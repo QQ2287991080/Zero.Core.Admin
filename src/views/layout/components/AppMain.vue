@@ -1,6 +1,6 @@
 <template>
   <section class="app-main">
-    <h1>我666</h1>
+    <h1>Home</h1>
     <transition name="fade" mode="out-in">
       <router-view></router-view>
     </transition>

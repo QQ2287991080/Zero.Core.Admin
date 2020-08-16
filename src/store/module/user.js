@@ -67,8 +67,8 @@ const actions = {
       //获取用户详情
       GetUserInfo().then((res) => {
         const { data } = res.data
-        console.log('now get userInfo ')
-        console.log(data)
+        //console.log('now get userInfo ')
+        //console.log(data)
         //头像
         commit('SET_AVATAR', data.avatar)
         //真实姓名

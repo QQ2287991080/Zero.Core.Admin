@@ -45,6 +45,14 @@ export const routes = [
           icon: 'dashboard',
         },
       },
+      {
+        path: '/test/siderbar',
+        component: () => import('@/views/layout/components/mySidebar'),
+        meta: {
+          title: '测试菜单',
+          icon: 'test',
+        },
+      },
     ],
   },
   {

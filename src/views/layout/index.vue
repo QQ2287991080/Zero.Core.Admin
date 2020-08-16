@@ -9,8 +9,8 @@
 a
 <script>
 import AppMain from "@/views/layout/components/AppMain"; //页面布局的右侧区域
-import sidebar from "@/views/layout/components/sidebar"; //页面布局的左侧菜单
-
+//import sidebar from "@/views/layout/components/sidebar"; //页面布局的左侧菜单
+import sidebar from "../layout/components/mySidebar/index";
 export default {
   name: "layout",
   components: {

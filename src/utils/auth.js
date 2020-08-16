@@ -6,7 +6,7 @@ export const key = 'Admin'
 //将token放入cookie
 export const setToken = (token) => {
   //var key = userid + admin
-  cookie.set(key, token, { expires: 1 })
+  cookie.set(key, token, { expires: 0.03 })
 }
 
 //获取token
