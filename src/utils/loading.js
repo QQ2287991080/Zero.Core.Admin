@@ -17,7 +17,7 @@ const startLoading = () => {
 const endLoading = () => loading.close()
 
 //显示loading方法
-export const showLoading = () => {
+export const open = () => {
   //如果数量为0
   if (loadingCount === 0) {
     //开始
@@ -27,7 +27,7 @@ export const showLoading = () => {
 }
 
 //隐藏loading方法
-export const hiddenLoading = () => {
+export const close = () => {
   if (loadingCount <= 0) return
   loadingCount -= 1
   if (loadingCount === 0) {

@@ -1,7 +1,6 @@
 import router from '../router'
 import axios from 'axios'
 import { Message } from 'element-ui'
-import { showLoading, hiddenLoading } from '../utils/loading'
 import { getToken, removeToken } from './auth'
 //element alert 窗口
 const Tips = (msg, type) => {
@@ -25,7 +24,6 @@ var instance = axios.create({
 //#region  请求拦截器
 instance.interceptors.request.use(
   (config) => {
-    showLoading()
     var token = getToken()
     if (token !== null) {
       config.headers.Authorization = `Bearer ${token}`
@@ -34,7 +32,6 @@ instance.interceptors.request.use(
   },
   (err) => {
     console.log('axios error in request')
-    hiddenLoading()
     return Promise.reject(err)
   }
 )
@@ -62,7 +59,6 @@ instance.interceptors.response.use(
         Tips(response.data.msg, 'success')
         break
     }
-    hiddenLoading()
     return Promise.resolve(response)
   },
   (error) => {
@@ -79,7 +75,6 @@ instance.interceptors.response.use(
     //处理错误
     const data = error.response
     console.log(data)
-    hiddenLoading()
     //授权失败
     if (data.status === 401) {
       Tips('身份信息过期，请重新登录。', 'error')

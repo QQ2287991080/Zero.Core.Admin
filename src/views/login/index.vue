@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { open, close } from "../../utils/loading";
 export default {
   data() {
     //验证用户名
@@ -79,6 +80,14 @@ export default {
       this.$refs[formName].validate((valid) => {
         //验证表达是否通过
         if (valid) {
+          // this.$loading({
+          //   lock: true,
+          //   text: "Loading",
+          //   spinner: "el-icon-loading",
+          //   background: "rgba(0, 0, 0, 0.7)",
+          // });
+
+          open();
           console.log(this.loginForm);
           var result = this.$store
             .dispatch("login", this.loginForm)
@@ -88,6 +97,10 @@ export default {
                 this.$router.push("/");
               }
             });
+          setTimeout(() => {
+            console.log("hidden loading");
+            close();
+          }, 2000);
           // this.$router.push({
           //   path: this.redirect || "/",
           //   query: this.otherQuery,

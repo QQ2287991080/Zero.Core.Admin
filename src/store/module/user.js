@@ -1,5 +1,5 @@
 import { Login, LoginOut, GetUserInfo } from '@/api/user/index'
-import { setToken, getToken, removeToekn } from '@/utils/auth'
+import { setToken, getToken, removeToken } from '@/utils/auth'
 //初始化State
 const state = {
   token: '',
@@ -93,7 +93,7 @@ const actions = {
         .then((res) => {
           if (res.data.data.statuCode === 200) {
             //token
-            removeToekn()
+            removeToken()
             //头像
             commit('SET_AVATAR', '')
             //真实姓名

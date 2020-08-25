@@ -15,6 +15,10 @@ import './icons/index'
 import './styles/index.scss'
 import './setup/ThirdUI'
 //#endregion
+//loading
+// import loading from './utils/loading'
+// Vue.prototype.$loading = loading
+
 //#region  解决 Avoided redundant navigation to current location 错误
 Vue.config.productionTip = false
 const originalPush = route.prototype.push

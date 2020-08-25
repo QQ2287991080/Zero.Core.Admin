@@ -2,20 +2,26 @@
   <div class="app-wrapper">
     <sidebar class="sidebar-container"></sidebar>
     <div class="main-container">
+      <main-Header />
+      <main-Tags />
       <app-main></app-main>
     </div>
   </div>
 </template>
 a
 <script>
-import AppMain from "@/views/layout/components/AppMain"; //页面布局的右侧区域
+import appMain from "@/views/layout/components/AppMain"; //页面布局的右侧区域
 //import sidebar from "@/views/layout/components/sidebar"; //页面布局的左侧菜单
 import sidebar from "../layout/components/mySidebar/index";
+import mainHeader from "../layout/components/header/mainHeader"; //头部
+import mainTags from "../layout/components/header/mainTags"; //标签
 export default {
   name: "layout",
   components: {
     sidebar,
-    AppMain,
+    appMain,
+    mainHeader,
+    mainTags,
   },
 };
 </script>
