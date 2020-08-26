@@ -1,6 +1,5 @@
 <template>
   <section class="app-main">
-    <h1>Home</h1>
     <transition name="fade" mode="out-in">
       <router-view></router-view>
     </transition>

@@ -4,7 +4,7 @@ import App from './App.vue'
 import router from './router'
 import route from 'vue-router'
 import store from './store'
-import './utils/permission'
+//import './utils/permission'
 //import './utils/global'
 //#endregion
 
