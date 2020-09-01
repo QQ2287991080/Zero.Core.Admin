@@ -3,6 +3,7 @@
     <sidebar class="sidebar-container"></sidebar>
     <div class="main-container">
       <main-header />  
+      <hr class="line"/>
       <main-tags/>
       <app-main></app-main>
     </div>
@@ -32,4 +33,9 @@ export default {
   height: 100%;
   width: 100%;
 }
+.line{
+     width: 100%;
+     height: auto;
+     border-color: #e7e7e7;
+   }
 </style>
