@@ -8,6 +8,7 @@ export const routes = [
     path: '/',
     component: Layout,
     //redirect: '/dashboard',
+
     children: [
       {
         path: 'dashboard',
@@ -26,7 +27,7 @@ export const routes = [
     //name: '系统设置',
     meta: {
       title: '系统设置',
-      icon: 'el-icon-setting',
+      icon: 'dashboard',
     },
     children: [
       {
@@ -50,7 +51,7 @@ export const routes = [
         component: () => import('@/views/layout/components/mySidebar'),
         meta: {
           title: '测试菜单',
-          icon: 'test',
+          icon: 'dashboard',
         },
       },
     ],

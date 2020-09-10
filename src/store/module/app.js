@@ -1,19 +1,22 @@
 //state
-const state={
-  isCollapse:true
+const state = {
+  isCollapse: true,
 }
 //mutations
-const mutations={
+const mutations = {
   //设置菜单折叠
-  SET_COLLAPSE(state,value)
-  {
-    state.isCollapse=value
-  }
+  SET_COLLAPSE(state, value) {
+    state.isCollapse = value
+  },
 }
-const actions={
+const actions = {
   //设置折叠
-  collapse({commit},value)
-  {
-     commit('SET_COLLAPSE',value)
-  }
+  collapse({ commit }, value) {
+    commit('SET_COLLAPSE', value)
+  },
+}
+export default {
+  state,
+  mutations,
+  actions,
 }

@@ -1,11 +1,14 @@
 <template>
   <el-menu
     mode="vertical"
-    unique-opened
-    :default-active="$route.path"
+    :show-timeout="200"
+    :collapse="isCollapse"
+    :collapse-transition="false"
     background-color="#304156"
-    text-color="#fff"
+    text-color="#bfcbd9"
     active-text-color="#409EFF"
+    :unique-opened="true"
+    router
   >
     <sidebar-item :routes="routes"></sidebar-item>
   </el-menu>
@@ -16,6 +19,12 @@ import sidebarItem from "./sidebarItem";
 
 export default {
   components: { sidebarItem },
+  data() {
+    return {
+      isCollapse: true,
+    };
+  },
+
   computed: {
     routes() {
       //   console.log(this.$router.options.routes);
@@ -26,3 +35,4 @@ export default {
   },
 };
 </script>
+</style>
