@@ -6,6 +6,6 @@ const getters = {
   avatar: (state) => user.state.avatar, //头像
   permission: (state) => user.state.permission, //权限
   menu: (state) => user.state.menu, //菜单
-  isCollapse: (state) => app.isCollapse,
+  isCollapse: (state) => app.state.isCollapse,
 }
 export default getters
