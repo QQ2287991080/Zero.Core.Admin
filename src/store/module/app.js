@@ -1,6 +1,6 @@
 //state
 const state = {
-  isCollapse: true,
+  isCollapse: false,
 }
 //mutations
 const mutations = {

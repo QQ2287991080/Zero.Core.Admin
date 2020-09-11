@@ -50,23 +50,24 @@ export default {
 
 <style lang="scss" scoped>
 .main-header-container {
+  overflow: hidden;
+  position: relative;
   height: 80px;
-  width: 100%;
   /* background-color: rgb(48, 65, 86); */
   background-color: #ffffff;
   //box-shadow:2px 0px 15px 0px rgba(0,0,0,0.3);
   display: flex;
   justify-content: center;
   align-items: center;
-  .box {
-    width: 80%;
-  }
-  .menu-collapse {
-    width: 200px;
-  }
-  .avater {
-    width: 200px;
-  }
+  // .box {
+  //   width: 80%;
+  // }
+  // .menu-collapse {
+  //   width: 200px;
+  // }
+  // .avater {
+  //   width: 200px;
+  // }
 }
 .line {
   width: 100px;

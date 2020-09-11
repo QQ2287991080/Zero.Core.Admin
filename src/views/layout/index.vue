@@ -1,9 +1,13 @@
+
 <template>
-  <div class="app-wrapper">
+  <div :class="classObj" class="app-wrapper">
     <sidebar class="sidebar-container" />
-    <div class="main-container">
-      <main-header />
-      <hr class="line" />
+    <div :class="{hasTagsView:needTagsView}" class="main-container">
+      <div class="fixed-header">
+        <main-header />
+        <hr class="line" />
+      </div>
+
       <main-tags />
       <app-main></app-main>
     </div>
@@ -16,6 +20,8 @@ import sidebar from "@/views/layout/components/sidebar"; //页面布局的左侧
 //import sidebar from "../layout/components/mySidebar/index";
 import mainHeader from "../layout/components/header/mainHeader"; //头部
 import mainTags from "../layout/components/header/mainTags"; //标签
+
+import store from "@/store/index";
 export default {
   name: "layout",
   components: {
@@ -23,6 +29,25 @@ export default {
     appMain,
     mainHeader,
     mainTags,
+  },
+  data() {
+    return {
+      device: "mobile",
+      openSidebar: false,
+      fixedHeader: "",
+      needTagsView: true,
+    };
+  },
+  computed: {
+    classObj() {
+      console.log(store.getters.isCollapse);
+      return {
+        hideSidebar: store.getters.isCollapse,
+        openSidebar: !store.getters.isCollapse,
+        withoutAnimation: false,
+        mobile: "mobile",
+      };
+    },
   },
 };
 </script>
@@ -67,6 +92,9 @@ export default {
 }
 
 .mobile .fixed-header {
+  width: 100%;
+}
+.line {
   width: 100%;
 }
 </style>

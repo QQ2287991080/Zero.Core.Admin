@@ -9,22 +9,25 @@
           :to="item.path+item.children[0].path"
           :key="item.children[0].name"
         >
-          <!-- 渲染菜单 -->
+          <!-- 生成一级菜单 -->
           <el-menu-item
             :index="item.path+item.children[0].path"
             :class="{'submenu-title-noDropdown':!isNest}"
           >
             <svg-icon :icon-class="item.children[0].meta.icon" />
-            <span
-              v-if="item.children[0].meta&&item.children[0].meta.title"
-            >{{item.children[0].meta.title}}</span>
+            <template slot="title">
+              <span
+                v-if="item.children[0].meta&&item.children[0].meta.title"
+              >{{item.children[0].meta.title}}</span>
+            </template>
           </el-menu-item>
+          <!-- 生成一级菜单 -->
         </router-link>
         <!-- 生成二级菜单 -->
         <el-submenu v-else :index="item.name||item.path" :key="item.name">
           <template slot="title">
+            <svg-icon :icon-class="item.meta.icon" />
             <span v-if="item.meta&&item.meta.title">
-              <svg-icon :icon-class="item.meta.icon" />
               <!-- <i :class="iconClass(item.meta.icon)" /> -->
               {{item.meta.title}}
             </span>
@@ -47,7 +50,9 @@
               </router-link>
             </template>
           </template>
+          <!-- 遍历自己 -->
         </el-submenu>
+        <!-- 生成二级菜单 -->
       </template>
     </template>
   </div>
