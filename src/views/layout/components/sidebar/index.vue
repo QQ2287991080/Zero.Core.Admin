@@ -4,7 +4,7 @@
     :collapse="isCollapse"
     :collapse-transition="true"
     background-color="#304156"
-    text-color="#bfcbd9"
+    text-color="#f4f4f5"
     active-text-color="#409EFF"
     :default-active="active"
     :unique-opened="false"

@@ -70,6 +70,10 @@
       height: 100%;
       width: 100% !important;
     }
+    .el-menu-item,
+    .el-submenu__title {
+      text-align: left;
+    }
 
     // menu hover
     .submenu-title-noDropdown,
@@ -77,6 +81,7 @@
       &:hover {
         background-color: $menuHover !important;
       }
+      //text-align: left;
     }
 
     .is-active > .el-submenu__title {
@@ -153,13 +158,13 @@
         }
       }
     }
-    .el-menu--collapse .el-submenu__title span {
-      display: none;
-    }
-    /*隐藏 > */
-    .el-menu--collapse .el-submenu__title .el-submenu__icon-arrow {
-      display: none;
-    }
+    // .el-menu--collapse .el-submenu__title span {
+    //   display: none;
+    // }
+    // /*隐藏 > */
+    // .el-menu--collapse .el-submenu__title .el-submenu__icon-arrow {
+    //   display: none;
+    // }
   }
 
   .el-menu--collapse .el-menu .el-submenu {

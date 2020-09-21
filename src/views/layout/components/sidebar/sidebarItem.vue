@@ -12,11 +12,12 @@
           <!-- 生成一级菜单 -->
           <el-menu-item
             :index="item.path+item.children[0].path"
-            :class="{'submenu-title-noDropdown':!isNest}"
+            :class="{'submenu-title-noDropdown':isNest}"
           >
             <svg-icon :icon-class="item.children[0].meta.icon" />
             <template slot="title">
               <span
+                class="el-first-menu-span"
                 v-if="item.children[0].meta&&item.children[0].meta.title"
               >{{item.children[0].meta.title}}</span>
             </template>
@@ -79,4 +80,7 @@ export default {
 };
 </script>
 <style>
-</style
+.el-first-menu-span {
+  margin-left: 5px;
+}
+</style>

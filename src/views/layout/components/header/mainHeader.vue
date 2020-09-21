@@ -1,7 +1,6 @@
 <template>
   <div class="main-header-container">
     <div class="menu-collapse">
-      <!-- <img :src="require('./assets/menu/png')" /> -->
       <img :src="menuImg" @click="ChangeCollapse" />
     </div>
     <div class="box"></div>
@@ -38,10 +37,7 @@ export default {
     //改变菜单伸缩
     ChangeCollapse: function name(params) {
       var collapse = store.getters.isCollapse;
-      console.log(collapse);
-      console.log("******");
       store.dispatch("collapse", !collapse);
-      console.log(store.getters.isCollapse);
     },
   },
 };
