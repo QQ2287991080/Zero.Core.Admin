@@ -1,11 +1,12 @@
 #app {
+  // 右边容器样式
   .main-container {
     min-height: 100%;
     transition: margin-left 0.28s;
     margin-left: $sideBarWidth;
     position: relative;
   }
-
+  // 左边菜单样式
   .sidebar-container {
     transition: width 0.28s;
     width: $sideBarWidth !important;
@@ -57,7 +58,7 @@
     }
 
     .svg-icon {
-      margin-right: 16px;
+      margin-right: 5px;
     }
 
     .sub-el-icon {
@@ -73,9 +74,13 @@
     .el-menu-item,
     .el-submenu__title {
       text-align: left;
+      // 设置icon图标颜色
+      // i {
+      //   color: $subMenuActiveText;
+      // }
     }
-
-    // menu hover
+    // #409EFF
+    // 菜单触碰样式
     .submenu-title-noDropdown,
     .el-submenu__title {
       &:hover {
@@ -98,12 +103,13 @@
       }
     }
   }
-
+  // 菜单隐藏样式
   .hideSidebar {
+    //菜单
     .sidebar-container {
       width: 54px !important;
     }
-
+    //右边容器
     .main-container {
       margin-left: 54px;
     }

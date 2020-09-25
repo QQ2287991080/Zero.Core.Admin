@@ -17,6 +17,7 @@ export const routes = [
         meta: {
           title: '首页',
           icon: 'dashboard',
+          iconType: 'svg',
         },
       },
     ],
@@ -26,8 +27,9 @@ export const routes = [
     component: Layout,
     //name: '系统设置',
     meta: {
-      title: '系统设置',
+      title: '测试二级菜单',
       icon: 'dashboard',
+      iconType: 'svg',
     },
     children: [
       {
@@ -36,6 +38,7 @@ export const routes = [
         meta: {
           title: '图标1',
           icon: 'dashboard',
+          iconType: 'svg',
         },
       },
       {
@@ -44,6 +47,7 @@ export const routes = [
         meta: {
           title: '图标2',
           icon: 'dashboard',
+          iconType: 'svg',
         },
       },
       {
@@ -52,6 +56,36 @@ export const routes = [
         meta: {
           title: '测试菜单',
           icon: 'dashboard',
+          iconType: 'svg',
+        },
+      },
+    ],
+  },
+  {
+    path: '/system',
+    component: Layout,
+    meta: {
+      title: '系统设置',
+      icon: 'setting',
+      iconType: 'el',
+    },
+    children: [
+      {
+        path: '/system/role',
+        component: () => import('@/views/systemModule/role'),
+        meta: {
+          title: '角色管理',
+          icon: 'user',
+          iconType: 'el',
+        },
+      },
+      {
+        path: '/system/role',
+        component: () => import('@/views/systemModule/role'),
+        meta: {
+          title: '角色管理',
+          icon: 'user',
+          iconType: 'el',
         },
       },
     ],
