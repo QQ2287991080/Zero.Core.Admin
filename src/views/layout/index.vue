@@ -3,14 +3,14 @@
   <div :class="classObj" class="app-wrapper">
     <!-- <img :src="menuImg" @click="ChangeCollapse" /> -->
     <sidebar class="sidebar-container" />
-    <div :class="{hasTagsView:needTagsView}" class="main-container">
+    <div :class="{ hasTagsView: needTagsView }" class="main-container">
       <div class="fixed-header">
         <main-header />
-        <hr class="line" />
+        <hr />
+        <main-tags />
+        <hr />
       </div>
-
-      <main-tags />
-      <app-main></app-main>
+      <app-main />
     </div>
   </div>
 </template>

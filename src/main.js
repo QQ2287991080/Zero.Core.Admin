@@ -12,8 +12,8 @@ import store from './store'
 
 //UI 插件
 import './icons/index'
-import './styles/index.scss'
 import './setup/ThirdUI'
+import '@/styles/index.scss'
 //#endregion
 //loading
 // import loading from './utils/loading'

@@ -3,7 +3,7 @@
     <el-pagination
       :background="background"
       :current-page.sync="currentPage"
-      :page-size.sync="pageSize"
+      :page-size.sync="currentSize"
       :layout="layout"
       :page-sizes="pageSizes"
       :total="total"
@@ -73,7 +73,7 @@ export default {
         this.$emit("update:pageIndex", val);
       },
     },
-    pageSize: {
+    currentSize: {
       get() {
         return this.pageSize;
       },

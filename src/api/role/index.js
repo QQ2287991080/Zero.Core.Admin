@@ -7,7 +7,7 @@ import request from '@/utils/request'
 export function getDataList(parameter) {
   return request({
     url: 'api/role/getDataList',
-    method: 'get',
-    params: parameter,
+    method: 'post',
+    data: parameter,
   })
 }
