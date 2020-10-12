@@ -15,6 +15,7 @@
         >
           <!-- 生成一级菜单 -->
           <el-menu-item
+            @click="addTags(item.path, item.children[0].path)"
             :index="item.path + item.children[0].path"
             :class="{ 'submenu-title-noDropdown': isNest }"
           >
@@ -61,7 +62,10 @@
                 :key="child.path"
               ></sidebar-item>
               <router-link v-else :to="child.path" :key="child.name">
-                <el-menu-item :index="child.path">
+                <el-menu-item
+                  @click="addTags(child.path, child.meta.title)"
+                  :index="child.path"
+                >
                   <!-- <svg-icon :icon-class="child.meta.icon" /> -->
                   <chooseIcon
                     :iconType="child.meta.iconType"
@@ -83,6 +87,7 @@
 </template>
 
 <script>
+import store from "@/store";
 import chooseIcon from "../icon";
 export default {
   components: {
@@ -102,14 +107,62 @@ export default {
     iconClass(icon) {
       return icon;
     },
-    // 图标显示
-    chooseIcon(iconName, iconType) {
-      if (iconType === "svg") {
-        return '<svg-icon icon-class="' + iconName + '" />';
-      } else {
-        return '<i class="el-icon-' + iconName + '" />';
+    addTags(path, title) {
+      console.log(path);
+      var route = this.route;
+      var option = { route: path, name: title };
+      var flag = true;
+      this.options.forEach((element) => {
+        if (element.route === path) {
+          console.log("xxxx");
+          flag = false;
+        }
+      });
+      console.log(flag);
+      if (flag) {
+        console.log("不存在的tab");
+        store.commit("add_tabs", option);
       }
+      store.commit("set_active_index", path);
+      // // 刷新时以当前路由做为tab加入tabs
+      // if (
+      //   this.$route.path !== "/" &&
+      //   this.$route.path.indexOf("userInfo") == -1
+      // ) {
+      //   store.commit("add_tabs", { route: "/", name: "首页" });
+      //   store.commit("add_tabs", {
+      //     route: path,
+      //     name: title,
+      //   });
+      //   store.commit("set_active_index", this.$route.path);
+      // } else {
+      //   store.commit("add_tabs", { route: "/", name: "首页" });
+      //   store.commit("set_active_index", "/");
+      //   this.$router.push("/");
+      // }
     },
+  },
+  computed: {
+    options() {
+      return store.getters.options;
+    },
+  },
+  mounted() {
+    //  if (
+    //     this.$route.path !== "/" &&
+    //     this.$route.path.indexOf("userInfo") == -1
+    //   ) {
+    //     store.commit("add_tabs", { route: "/", name: "首页" });
+    //     store.commit("add_tabs", {
+    //       route: this.$route.path,
+    //       name: this.$route.name,
+    //     });
+    //     store.commit("set_active_index", this.$route.path);
+    //   } else {
+    //     store.commit("add_tabs", { route: "/", name: "首页" });
+    //     store.commit("set_active_index", "/");
+    //     this.$router.push("/");
+    //   }
   },
 };
 </script>
