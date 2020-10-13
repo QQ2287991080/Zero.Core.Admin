@@ -7,7 +7,8 @@
       <div class="fixed-header">
         <main-header />
         <hr />
-        <main-tags />
+        <!-- <main-tags /> -->
+        <tags />
         <hr />
       </div>
       <app-main />
@@ -21,6 +22,7 @@ import sidebar from "@/views/layout/components/sidebar"; //页面布局的左侧
 //import sidebar from "../layout/components/mySidebar/index";
 import mainHeader from "../layout/components/header/mainHeader"; //头部
 import mainTags from "../layout/components/header/mainTags"; //标签
+import tags from "../layout/components/tags";
 
 import store from "@/store/index";
 export default {
@@ -30,6 +32,7 @@ export default {
     appMain,
     mainHeader,
     mainTags,
+    tags,
   },
   data() {
     return {
