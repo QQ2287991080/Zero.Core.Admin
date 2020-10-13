@@ -1,6 +1,6 @@
 //dashboard
 const state = {
-  options: [],
+  options: [{ route: '/dashboard', name: '首页' }],
   activeIndex: '/',
   userInfo: {},
 }
@@ -18,15 +18,15 @@ const mutations = {
       }
       index++
     }
-    this.state.options.splice(index, 1)
+    state.options.splice(index, 1)
   },
   // 设置当前激活的tab
   set_active_index(state, index) {
-    this.state.activeIndex = index
+    state.activeIndex = index
   },
   // 设置详情信息
   save_detail_info(state, info) {
-    this.state.userInfo = info
+    state.userInfo = info
   },
 }
 

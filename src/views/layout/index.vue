@@ -6,10 +6,10 @@
     <div :class="{ hasTagsView: needTagsView }" class="main-container">
       <div class="fixed-header">
         <main-header />
-        <hr />
+        <!-- <hr /> -->
         <!-- <main-tags /> -->
         <tags />
-        <hr />
+        <!-- <hr /> -->
       </div>
       <app-main />
     </div>
@@ -65,8 +65,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// @import "~@/styles/mixin.scss";
-// @import "~@/styles/variables.scss";
+@import "~@/styles/mixin.scss";
+@import "~@/styles/variables.scss";
 
 // .app-wrapper {
 //   @include clearfix;
@@ -99,13 +99,13 @@ export default {
 //   transition: width 0.28s;
 // }
 
-// .hideSidebar .fixed-header {
-//   width: calc(100% - 54px);
-// }
+.hideSidebar .fixed-header {
+  width: calc(100% - 54px);
+}
 
-// .mobile .fixed-header {
-//   width: 100%;
-// }
+.mobile .fixed-header {
+  width: 100%;
+}
 // .line {
 //   width: 100%;
 // }

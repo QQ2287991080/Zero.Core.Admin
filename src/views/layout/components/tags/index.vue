@@ -2,7 +2,7 @@
   <div class="template-tabs">
     <el-tabs
       v-model="activeIndex"
-      type="border-card"
+      type="card"
       closable
       @tab-click="tabClick"
       v-if="options.length"
@@ -27,15 +27,13 @@ export default {
     // tab切换时，动态的切换路由
     tabClick(tab) {
       let path = this.activeIndex;
-      // 用户详情页的时候，对应了二级路由，需要拼接添加第二级路由
-      if (this.activeIndex === "/userInfo") {
-        path = this.activeIndex + "/" + this.$store.state.userInfo.name;
-      }
+      console.log(path);
       this.$router.push({ path: path });
     },
     tabRemove(targetName) {
+      console.log(targetName);
       // 首页不可删除
-      if (targetName == "/") {
+      if (targetName == "/dashboard") {
         return;
       }
       this.$store.commit("delete_tabs", targetName);
@@ -90,5 +88,10 @@ export default {
 };
 </script>
 
-<style>
+</style>
+<style lang="scss" scoped>
+.el-tabs {
+  //border: 1px solid red;
+  height: 41px;
+}
 </style>

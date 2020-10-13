@@ -15,7 +15,12 @@
         >
           <!-- 生成一级菜单 -->
           <el-menu-item
-            @click="addTags(item.path, item.children[0].path)"
+            @click="
+              addTags(
+                item.path + item.children[0].path,
+                item.children[0].meta.title
+              )
+            "
             :index="item.path + item.children[0].path"
             :class="{ 'submenu-title-noDropdown': isNest }"
           >
@@ -111,16 +116,15 @@ export default {
       console.log(path);
       var route = this.route;
       var option = { route: path, name: title };
+
+      //store中是否存在
       var flag = true;
       this.options.forEach((element) => {
         if (element.route === path) {
-          console.log("xxxx");
           flag = false;
         }
       });
-      console.log(flag);
       if (flag) {
-        console.log("不存在的tab");
         store.commit("add_tabs", option);
       }
       store.commit("set_active_index", path);
