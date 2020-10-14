@@ -113,21 +113,20 @@ export default {
       return icon;
     },
     addTags(path, title) {
-      console.log(path);
-      var route = this.route;
-      var option = { route: path, name: title };
-
+      let option = { path: path, name: title };
       //store中是否存在
       var flag = true;
       this.options.forEach((element) => {
-        if (element.route === path) {
+        if (element.path === path) {
           flag = false;
         }
       });
       if (flag) {
-        store.commit("add_tabs", option);
+        // store.commit("add_tabs", option);
+        store.dispatch("addTab", option);
       }
-      store.commit("set_active_index", path);
+      // store.commit("set_active_index", path);
+      store.dispatch("setActiveIndex", path);
       // // 刷新时以当前路由做为tab加入tabs
       // if (
       //   this.$route.path !== "/" &&
