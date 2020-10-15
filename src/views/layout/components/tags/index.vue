@@ -51,13 +51,13 @@ export default {
     },
   },
   mounted() {
+    //获取 sessionStorage 中的标签数据，用于更新vuex中的标签对象
     if (sessionStorage.getItem("tabs")) {
       let tabs = JSON.parse(sessionStorage.getItem("tabs"));
-      console.log(store.getters.options);
+      //更新标签数组
       this.$store.state.tag.options = tabs;
-      console.log(store.getters.options);
-
       let activeIndex = sessionStorage.getItem("activeIndex");
+      //更新当前页
       this.$store.state.tag.activeIndex = activeIndex;
     }
   },

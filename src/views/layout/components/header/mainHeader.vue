@@ -1,7 +1,10 @@
 <template>
   <div class="main-header-container">
     <div class="menu-collapse">
-      <img :src="menuImg" @click="ChangeCollapse" />
+      <!-- <img :src="menuImg" @click="ChangeCollapse" /> -->
+
+      <i class="el-icon-s-unfold" @click="ChangeCollapse" v-show="isCollapse" />
+      <i class="el-icon-s-fold" @click="ChangeCollapse" v-show="!isCollapse" />
     </div>
     <div class="box"></div>
     <div class="avater">
@@ -32,6 +35,11 @@ export default {
     } else {
       this.userName = !store.getters.userName ? "Zero" : store.getters.userName;
     }
+  },
+  computed: {
+    isCollapse() {
+      return store.getters.isCollapse;
+    },
   },
   methods: {
     //改变菜单伸缩
@@ -66,6 +74,15 @@ export default {
   // .avater {
   //   width: 200px;
   // }
+}
+.menu-collapse {
+  position: absolute;
+  left: 10px;
+  font-size: 30px;
+}
+.avater {
+  position: absolute;
+  right: 50px;
 }
 .line {
   width: 100px;
