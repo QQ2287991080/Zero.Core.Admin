@@ -106,7 +106,4 @@ export default {
 .mobile .fixed-header {
   width: 100%;
 }
-// .line {
-//   width: 100%;
-// }
 </style>

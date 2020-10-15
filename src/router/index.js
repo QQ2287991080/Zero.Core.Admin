@@ -80,11 +80,11 @@ export const routes = [
         },
       },
       {
-        path: '/system/role',
-        component: () => import('@/views/systemModule/role'),
+        path: '/system/menu',
+        component: () => import('@/views/systemModule/menu/'),
         meta: {
-          title: '角色管理',
-          icon: 'user',
+          title: '菜单管理',
+          icon: 'menu',
           iconType: 'el',
         },
       },
