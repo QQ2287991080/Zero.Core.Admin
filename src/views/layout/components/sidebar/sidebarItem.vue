@@ -112,21 +112,25 @@ export default {
     iconClass(icon) {
       return icon;
     },
+    //将当前路由的路由信息添加到 tabs集合中
     addTags(path, title) {
+      //单个对象
       let option = { path: path, name: title };
       //store中是否存在
       var flag = true;
+      //循环判断路由是否存在，存在的话更改activeIndex，跳转到对应页面
       this.options.forEach((element) => {
+        //如果path 存在
         if (element.path === path) {
           flag = false;
         }
       });
       if (flag) {
-        // store.commit("add_tabs", option);
+        //添加
         store.dispatch("addTab", option);
       }
       // store.commit("set_active_index", path);
-      store.dispatch("setActiveIndex", path);
+      //store.dispatch("setActiveIndex", path);
       // // 刷新时以当前路由做为tab加入tabs
       // if (
       //   this.$route.path !== "/" &&
@@ -151,6 +155,8 @@ export default {
     },
   },
   mounted() {
+    // console.log(this.$route.path);
+    // store.dispatch("setActiveIndex", this.$route.path);
     //  if (
     //     this.$route.path !== "/" &&
     //     this.$route.path.indexOf("userInfo") == -1
@@ -166,6 +172,16 @@ export default {
     //     store.commit("set_active_index", "/");
     //     this.$router.push("/");
     //   }
+  },
+  watch: {
+    //监听路由变化，更新tab的activeIndex
+    $route: {
+      handler: function (route) {
+        console.log(route.path);
+        store.dispatch("setActiveIndex", route.path);
+      },
+      immediate: true,
+    },
   },
 };
 </script>

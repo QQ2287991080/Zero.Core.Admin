@@ -23,40 +23,30 @@ export const routes = [
     ],
   },
   {
-    path: '/svg-icons',
+    path: '/command/technology',
     component: Layout,
-    //name: '系统设置',
     meta: {
-      title: '测试二级菜单',
-      icon: 'dashboard',
+      title: '系统功能',
+      icon: 'definition',
       iconType: 'svg',
     },
     children: [
       {
-        path: '/svg-icons',
-        component: () => import('@/views/svg-icons'),
+        path: '/command/technology',
+        component: () => import('@/views/command/technology'),
         meta: {
-          title: '图标1',
-          icon: 'dashboard',
-          iconType: 'svg',
+          title: '技术总览',
+          icon: 'document',
+          iconType: 'el',
         },
       },
       {
-        path: '/svg-icon2',
-        component: () => import('@/views/svg-icons'),
+        path: '/command/signalrLog',
+        component: () => import('@/views/command/signalrLog'),
         meta: {
-          title: '图标2',
-          icon: 'dashboard',
-          iconType: 'svg',
-        },
-      },
-      {
-        path: '/test/siderbar',
-        component: () => import('@/views/layout/components/mySidebar'),
-        meta: {
-          title: '测试菜单',
-          icon: 'dashboard',
-          iconType: 'svg',
+          title: '日志推送',
+          icon: 'news',
+          iconType: 'el',
         },
       },
     ],
@@ -71,12 +61,21 @@ export const routes = [
     },
     children: [
       {
+        path: '/svg-icons',
+        component: () => import('@/views/svg-icons'),
+        meta: {
+          title: '图标管理',
+          icon: 'icon',
+          iconType: 'svg',
+        },
+      },
+      {
         path: '/system/role',
         component: () => import('@/views/systemModule/role'),
         meta: {
           title: '角色管理',
-          icon: 'user',
-          iconType: 'el',
+          icon: 'role',
+          iconType: 'svg',
         },
       },
       {
@@ -88,6 +87,15 @@ export const routes = [
           iconType: 'el',
         },
       },
+      {
+        path: '/system/user',
+        component: () => import('@/views/systemModule/user/'),
+        meta: {
+          title: '用户管理',
+          icon: 'user',
+          iconType: 'el',
+        },
+      }
     ],
   },
   {
