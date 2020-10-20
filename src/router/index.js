@@ -8,12 +8,11 @@ export const routes = [
     path: '/',
     component: Layout,
     //redirect: '/dashboard',
-
     children: [
       {
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
+        name: 'dashboard',
         meta: {
           title: '首页',
           icon: 'dashboard',
