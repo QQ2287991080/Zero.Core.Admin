@@ -17,17 +17,22 @@
             icon-class="el-icon-menu"
           >
             <span class="custom-tree-node" slot-scope="{ node, data }">
-              <span>{{ node.label }}</span>
+              <span>{{ data.name }}</span>
               <span>
-                <el-button type="text" size="mini" @click="() => append(data)">
-                  新增
-                </el-button>
                 <el-button
                   type="text"
                   size="mini"
+                  icon="el-icon-add-location"
+                  @click="() => append(data)"
+                >
+                </el-button>
+                <el-button type="text" icon="el-icon-edit" circle></el-button>
+                <el-button
+                  type="text"
+                  size="mini"
+                  icon="el-icon-delete"
                   @click="() => remove(node, data)"
                 >
-                  删除
                 </el-button>
               </span>
             </span>
@@ -51,22 +56,22 @@
       width="450px"
       :visible.sync="dialogFormVisible"
     >
-      <el-form :model="form" :rules="rules" ref="form">
-        <el-form-item label="名称" :label-width="formLabelWidth">
+      <el-form :model="form" ref="form" :rules="rules">
+        <el-form-item label="名称" prop="name" :label-width="formLabelWidth">
           <el-input
             v-model="form.name"
             autocomplete="off"
             placeholder="请输入名称"
           ></el-input>
         </el-form-item>
-        <el-form-item label="路由" :label-width="formLabelWidth">
+        <el-form-item label="路由" prop="url" :label-width="formLabelWidth">
           <el-input
             v-model="form.url"
             autocomplete="off"
             placeholder="请输入路由例如：/views/test"
           ></el-input>
         </el-form-item>
-        <el-form-item label="排序" :label-width="formLabelWidth">
+        <el-form-item label="排序" prop="sort" :label-width="formLabelWidth">
           <el-input v-model="form.sort" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="启用" :label-width="formLabelWidth">
@@ -103,39 +108,34 @@
   </div>
 </template>
 
+
 <script>
+import { open, close } from "@/utils/loading";
 let id = 1000;
 export default {
   data() {
-    const validateName = (rule, value, callback) => {
-      console.log(value);
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else if (value.length < 6) {
-        callback(new Error("密码不能小于六位字符"));
-      } else {
-        //通过验证则走回调不走的话会一直验证
-        callback();
-      }
-    };
     return {
       filterText: "",
       data: [
         {
           id: 1,
-          label: "一级 1",
+          name: "一级 1",
+          idParent: 0,
           children: [
             {
-              id: 4,
-              label: "二级 1-1",
+              id: 2,
+              name: "二级 1-1",
+              idParent: 1,
               children: [
                 {
-                  id: 9,
-                  label: "三级 1-1-1",
+                  id: 3,
+                  idParent: 2,
+                  name: "三级 1-1-1",
                 },
                 {
-                  id: 10,
-                  label: "三级 1-1-2",
+                  id: 4,
+                  idParent: 2,
+                  name: "三级 1-1-2",
                 },
               ],
             },
@@ -156,7 +156,7 @@ export default {
       //表单验证
 
       rules: {
-        name: [{ validator: validateName, trigger: "blur" }],
+        name: [{ required: true, message: "请输入名称", trigger: "blur" }],
         url: [{ required: true, message: "请输入路由", trigger: "blur" }],
         sort: [{ required: true, message: "请输入排序", trigger: "blur" }],
       },
@@ -165,6 +165,7 @@ export default {
         label: "label",
       },
       dialogFormVisible: false,
+      dialogVisible: false,
       tableData: [
         {
           date: "2016-05-02",
@@ -183,44 +184,52 @@ export default {
   methods: {
     //点击提交表单
     submit(form) {
+      open();
+      setTimeout(() => {
+        close();
+      }, 3000);
       //关闭弹窗
-      console.log(this.$refs[form]);
       this.$refs[form].validate((v) => {
-        console.log(v);
         if (v) {
           this.dialogFormVisible = false;
-          alert("successful");
         } else {
-          alert("error");
         }
       });
     },
     //清空表单
     closeForm(form) {
-      console.log("close dialog");
       this.$refs[form].resetFields();
     },
     //过滤节点
     filterNode(value, data) {
       if (!value) return true;
-      return data.label.indexOf(value) !== -1;
+      return data.name.indexOf(value) !== -1;
     },
     //新增节点
     append(data) {
+      console.log(data);
       const newChild = { id: id++, label: "testtest", children: [] };
-      console.log(newChild);
       this.dialogFormVisible = true;
-      // if (!data.children) {
-      //   this.$set(data, "children", []);
-      // }
-      // data.children.push(newChild);
     },
     //删除节点
     remove(node, data) {
-      const parent = node.parent;
-      const children = parent.data.children || parent.data;
-      const index = children.findIndex((d) => d.id === data.id);
-      children.splice(index, 1);
+      this.$confirm("此操作将永久删除该数据, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功!",
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
     },
 
     renderContent(h, { node, data, store }) {

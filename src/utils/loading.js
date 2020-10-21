@@ -1,16 +1,24 @@
 import { Loading } from 'element-ui'
 
+
 //loading数量
 let loadingCount = 0
 let loading
 
 //开始loading
+// const startLoading = () => {
+//   loading = Loading.service({
+//     lock: true,
+//     text: 'Loading',
+//     spinner: 'el-icon-loading',
+//     background: 'rgba(0, 0, 0, 0.7)',
+//   })
+// }
 const startLoading = () => {
   loading = Loading.service({
-    lock: true,
-    text: 'Loading',
-    spinner: 'el-icon-loading',
-    background: 'rgba(0, 0, 0, 0.7)',
+    fullscreen: true,
+    text: '拼命加载中...',
+    background: 'rgba(0, 0, 0, 0.8)'
   })
 }
 //结束
