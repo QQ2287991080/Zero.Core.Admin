@@ -177,7 +177,7 @@ export default {
     //监听路由变化，更新tab的activeIndex
     $route: {
       handler: function (route) {
-        console.log(route.path);
+        //console.log(route.path);
         store.dispatch("setActiveIndex", route.path);
       },
       immediate: true,

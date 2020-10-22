@@ -41,7 +41,7 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response) => {
     //响应代码
-    var code = response.data.statusCode
+    var code = response.data.errCode
     switch (code) {
       case 401:
         //未授权跳转登录页
@@ -52,11 +52,11 @@ instance.interceptors.response.use(
         return Promise.reject(response)
       case 400:
         //返回错误信息
-        Tips(response.data.msg, 'error')
-        console.log(response.data.msg)
+        Tips(response.data.errMsg, 'error')
+        console.log(response.data.errMsg)
         break
       default:
-        Tips(response.data.msg, 'success')
+        //Tips(response.data.errMsg, 'success')
         break
     }
     return Promise.resolve(response)

@@ -8,7 +8,7 @@
           <el-tree
             :data="data"
             show-checkbox
-            node-key="id"
+            node-key="name"
             default-expand-all
             :expand-on-click-node="false"
             ref="tree"
@@ -55,18 +55,19 @@
       @close="closeForm('form')"
       width="450px"
       :visible.sync="dialogFormVisible"
+      :close-on-click-modal="false"
     >
       <el-form :model="form" ref="form" :rules="rules">
         <el-form-item label="名称" prop="name" :label-width="formLabelWidth">
           <el-input
-            v-model="form.name"
+            v-model.trim="form.name"
             autocomplete="off"
             placeholder="请输入名称"
           ></el-input>
         </el-form-item>
         <el-form-item label="路由" prop="url" :label-width="formLabelWidth">
           <el-input
-            v-model="form.url"
+            v-model.trim="form.url"
             autocomplete="off"
             placeholder="请输入路由例如：/views/test"
           ></el-input>
@@ -99,6 +100,17 @@
             placeholder="请输入完整样式名称例如：test-class"
           ></el-input>
         </el-form-item>
+        <el-form-item
+          label="父级id"
+          style="display: none"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="form.idParent"
+            autocomplete="off"
+            placeholder="请输入完整样式名称例如：test-class"
+          ></el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -111,38 +123,45 @@
 
 <script>
 import { open, close } from "@/utils/loading";
+import {
+  getMenuTree,
+  isExistsName,
+  details,
+  deleteMenu,
+  addMenu,
+  updateMenu,
+} from "@/api/menu";
 let id = 1000;
 export default {
   data() {
+    //验证菜单名称
+    var validateName = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入名称"));
+      } else {
+        var id = this.form.id;
+        //调取接口
+        var validateData = { name: value, id: id };
+        isExistsName(validateData).then((res) => {
+          let any = res.data.data;
+          if (any) {
+            callback(new Error("名称已存在，请重新输入"));
+          }
+        });
+        callback();
+      }
+    };
+    var validUrl = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入路由"));
+      }
+      callback();
+    };
     return {
       filterText: "",
-      data: [
-        {
-          id: 1,
-          name: "一级 1",
-          idParent: 0,
-          children: [
-            {
-              id: 2,
-              name: "二级 1-1",
-              idParent: 1,
-              children: [
-                {
-                  id: 3,
-                  idParent: 2,
-                  name: "三级 1-1-1",
-                },
-                {
-                  id: 4,
-                  idParent: 2,
-                  name: "三级 1-1-2",
-                },
-              ],
-            },
-          ],
-        },
-      ],
+      data: [],
       form: {
+        id: 0,
         name: "", //菜单名称
         url: "", //对应router
         icon: "", //菜单的图标
@@ -156,13 +175,13 @@ export default {
       //表单验证
 
       rules: {
-        name: [{ required: true, message: "请输入名称", trigger: "blur" }],
-        url: [{ required: true, message: "请输入路由", trigger: "blur" }],
+        name: [{ required: true, validator: validateName, trigger: "blur" }],
+        url: [{ required: true, validator: validUrl, trigger: "blur" }],
         sort: [{ required: true, message: "请输入排序", trigger: "blur" }],
       },
       defaultProps: {
-        children: "children",
-        label: "label",
+        children: "childrens",
+        label: "name",
       },
       dialogFormVisible: false,
       dialogVisible: false,
@@ -176,25 +195,41 @@ export default {
     };
   },
   watch: {
+    //树--关键字搜索
     filterText(val) {
       this.$refs.tree.filter(val);
     },
   },
-
+  created() {
+    //初始化树
+    this.getTree();
+  },
   methods: {
+    //加载菜单树
+    getTree() {
+      open();
+      getMenuTree()
+        .then((res) => {
+          this.data = res.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      close();
+    },
     //点击提交表单
     submit(form) {
       open();
-      setTimeout(() => {
-        close();
-      }, 3000);
-      //关闭弹窗
-      this.$refs[form].validate((v) => {
-        if (v) {
+      //关闭弹窗\
+      this.$refs[form].validate((vaild) => {
+        if (vaild) {
           this.dialogFormVisible = false;
+          alert("success");
         } else {
+          alert("err");
         }
       });
+      close();
     },
     //清空表单
     closeForm(form) {
@@ -207,8 +242,7 @@ export default {
     },
     //新增节点
     append(data) {
-      console.log(data);
-      const newChild = { id: id++, label: "testtest", children: [] };
+      this.form.idParent = data.idParent;
       this.dialogFormVisible = true;
     },
     //删除节点

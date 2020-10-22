@@ -41,7 +41,6 @@ const mutations = {
 const actions = {
   //登录
   login({ commit }, userInfo) {
-    console.log('********登录表单********')
     const { userName, password } = userInfo
     //https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise
     return new Promise((resolve, reject) => {
