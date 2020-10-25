@@ -59,7 +59,7 @@ export function addMenu(menuForm) {
  */
 export function updateMenu(menuForm) {
   return request({
-    url: '/api/Menu/Add',
+    url: '/api/Menu/update',
     method: 'post',
     data: menuForm
   })

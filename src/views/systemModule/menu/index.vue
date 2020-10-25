@@ -7,33 +7,71 @@
         <div class="block">
           <el-tree
             :data="data"
-            show-checkbox
-            node-key="name"
+            :show-checkbox="false"
+            node-key="id"
             default-expand-all
             :expand-on-click-node="false"
             ref="tree"
             :filter-node-method="filterNode"
             :props="defaultProps"
             icon-class="el-icon-menu"
+            @node-click="handkeNodeClikc"
           >
             <span class="custom-tree-node" slot-scope="{ node, data }">
               <span>{{ data.name }}</span>
               <span>
-                <el-button
-                  type="text"
-                  size="mini"
-                  icon="el-icon-add-location"
-                  @click="() => append(data)"
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="新增子菜单"
+                  placement="top-start"
                 >
-                </el-button>
-                <el-button type="text" icon="el-icon-edit" circle></el-button>
-                <el-button
-                  type="text"
-                  size="mini"
-                  icon="el-icon-delete"
-                  @click="() => remove(node, data)"
+                  <el-button
+                    type="text"
+                    icon="el-icon-bottom"
+                    @click="() => appendChildren(data)"
+                  ></el-button>
+                </el-tooltip>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="新增平级菜单"
+                  placement="top-start"
                 >
-                </el-button>
+                  <el-button
+                    type="text"
+                    size="mini"
+                    icon="el-icon-add-location"
+                    @click="() => append(data)"
+                  >
+                  </el-button>
+                </el-tooltip>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="修改"
+                  placement="top-start"
+                >
+                  <el-button
+                    type="text"
+                    icon="el-icon-edit"
+                    @click="() => updateTree(data)"
+                  ></el-button>
+                </el-tooltip>
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  content="删除"
+                  placement="top-start"
+                >
+                  <el-button
+                    type="text"
+                    size="mini"
+                    icon="el-icon-delete"
+                    @click="() => remove(node, data)"
+                  >
+                  </el-button>
+                </el-tooltip>
               </span>
             </span>
           </el-tree>
@@ -51,8 +89,9 @@
     </div>
     <!-- 新增 form  -->
     <el-dialog
-      title="新增菜单"
+      :title="formTitle"
       @close="closeForm('form')"
+      :destroy-on-close="true"
       width="450px"
       :visible.sync="dialogFormVisible"
       :close-on-click-modal="false"
@@ -76,7 +115,6 @@
           <el-input v-model="form.sort" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="启用" :label-width="formLabelWidth">
-          <!-- <el-input v-model="form.isAllow" autocomplete="off"></el-input> -->
           <el-radio v-model="form.isAllow" :label="true">启用</el-radio>
           <el-radio v-model="form.isAllow" :label="false">禁用</el-radio>
         </el-form-item>
@@ -136,7 +174,7 @@ export default {
   data() {
     //验证菜单名称
     var validateName = (rule, value, callback) => {
-      if (value === "") {
+      if (value === "" || value === null) {
         callback(new Error("请输入名称"));
       } else {
         var id = this.form.id;
@@ -146,19 +184,22 @@ export default {
           let any = res.data.data;
           if (any) {
             callback(new Error("名称已存在，请重新输入"));
+          } else {
+            callback();
           }
         });
-        callback();
       }
     };
     var validUrl = (rule, value, callback) => {
-      if (value === "") {
+      if (value === "" || value === null) {
         callback(new Error("请输入路由"));
+      } else {
+        callback();
       }
-      callback();
     };
     return {
       filterText: "",
+      formTitle: "", //表单标题
       data: [],
       form: {
         id: 0,
@@ -214,36 +255,111 @@ export default {
         })
         .catch((err) => {
           console.log(err);
+          return false;
         });
       close();
     },
     //点击提交表单
     submit(form) {
-      open();
-      //关闭弹窗\
+      //关闭弹窗
       this.$refs[form].validate((vaild) => {
+        let submitForm = this.form;
         if (vaild) {
-          this.dialogFormVisible = false;
-          alert("success");
+          open();
+          //提交表单
+          if (submitForm.id === 0) {
+            //新增菜单
+            addMenu(submitForm)
+              .then((res) => {
+                this.$message({
+                  type: "success",
+                  message: res.data.errMsg,
+                });
+                this.dialogFormVisible = false;
+                this.getTree();
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          } else {
+            //修改表单
+            updateMenu(submitForm)
+              .then((res) => {
+                this.$message({
+                  type: "success",
+                  message: res.data.errMsg,
+                });
+                this.dialogFormVisible = false;
+                this.getTree();
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+          close();
+          console.log("😘");
         } else {
-          alert("err");
+          console.log("😘");
         }
       });
-      close();
     },
     //清空表单
     closeForm(form) {
       this.$refs[form].resetFields();
+      this.form = {
+        id: 0,
+        name: "", //菜单名称
+        url: "", //对应router
+        icon: "", //菜单的图标
+        iconType: "", //图标的类型
+        className: "", //样式名称
+        sort: 0, //菜单排序
+        isAllow: true, //是否启用
+        idParent: "", //父级id
+      };
     },
     //过滤节点
     filterNode(value, data) {
       if (!value) return true;
       return data.name.indexOf(value) !== -1;
     },
+    //点击树节点
+    handkeNodeClikc(data) {
+      console.log(data);
+    },
+    //#region 新增子菜单
+    //新增子菜单
+    appendChildren(data) {
+      this.dialogFormVisible = true;
+      this.formTitle = "新增子菜单";
+      this.form.idParent = data.id;
+    },
+    //#endregion
+    //#region  新增平级菜单
     //新增节点
     append(data) {
       this.form.idParent = data.idParent;
+      this.formTitle = "新增平级菜单";
       this.dialogFormVisible = true;
+    },
+    //#endregion
+
+    //#region  修改树节点
+    updateTree(data) {
+      //详情
+      this.dialogFormVisible = true;
+      this.menuDetails(data.id);
+    },
+    //#endregion
+    //获取菜单的详情
+    menuDetails(id) {
+      details({ id: id })
+        .then((res) => {
+          this.form = res.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     //删除节点
     remove(node, data) {
@@ -253,16 +369,27 @@ export default {
         type: "warning",
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
+          let parameter = { id: data.id };
+          deleteMenu(parameter)
+            .then((res) => {
+              if (res.data.errCode == 200) {
+                this.$message({
+                  type: "success",
+                  message: "删除成功!",
+                });
+                //更新菜单
+                this.getTree();
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
+          // this.$message({
+          //   type: "info",
+          //   message: "已取消删除",
+          // });
         });
     },
 

@@ -51,12 +51,12 @@ export const routes = [
     ],
   },
   {
-    path: '/system',
+    path: '',
     component: Layout,
     meta: {
-      title: '系统设置',
-      icon: 'setting',
-      iconType: 'el',
+      title: '系统功能',
+      icon: 'icon',
+      iconType: 'svg',
     },
     children: [
       {
@@ -68,6 +68,18 @@ export const routes = [
           iconType: 'svg',
         },
       },
+    ],
+  },
+  {
+    path: '/system',
+    component: Layout,
+    meta: {
+      title: '系统设置',
+      icon: 'setting',
+      iconType: 'el',
+    },
+    children: [
+      
       {
         path: '/system/role',
         component: () => import('@/views/systemModule/role'),
