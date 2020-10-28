@@ -46,16 +46,17 @@
           <span>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注" min-width="150px">
-        <template slot-scope="{ row }">
-          <span>{{ row.description }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="创建时间" min-width="150px" align="center">
         <template slot-scope="{ row }">
-          <span>{{ row.creationTime }}</span>
+          <span>{{ row.createTime }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="备注" min-width="150px">
+        <template slot-scope="{ row }">
+          <span>{{ row.memo }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column
         label="操作"
         align="center"
@@ -258,14 +259,12 @@ export default {
   methods: {
     getList() {
       this.listLoading = true;
-      console.log(this.listQuery);
       getDataList(this.listQuery)
         .then((response) => {
           console.log(response);
-          this.list = response.data.data.list;
+          this.list = response.data.data.data;
+          console.log(this.list);
           this.count = response.data.data.count;
-
-          // Just to simulate the time of the request
           setTimeout(() => {
             this.listLoading = false;
           }, 1.5 * 1000);

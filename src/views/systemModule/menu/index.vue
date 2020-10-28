@@ -14,11 +14,15 @@
             ref="tree"
             :filter-node-method="filterNode"
             :props="defaultProps"
-            icon-class="el-icon-menu"
             @node-click="handkeNodeClikc"
           >
             <span class="custom-tree-node" slot-scope="{ node, data }">
-              <span>{{ data.name }}</span>
+              <span :class="{ 'tree-span': clickKeyClass(data) }"
+                ><chooseIcon
+                  :iconType="data.iconType === 1 ? 'el' : 'svg'"
+                  :iconName="data.icon"
+                />{{ data.name }}</span
+              >
               <span>
                 <el-tooltip
                   class="item"
@@ -78,13 +82,53 @@
         </div>
       </div>
     </div>
+    <!-- 右边权限部分 -->
     <div class="menu-right">
-      <el-table :data="tableData" border style="width: 100%">
-        <el-table-column prop="date" label="日期" width="180">
+      <el-row>
+        <el-button type="primary" size="mini" @click="addPermission">
+          新增
+        </el-button>
+      </el-row>
+      <el-table
+        header-align="center"
+        :data="tableData"
+        border
+        style="width: 100%; margin-top: 20px"
+      >
+        <el-table-column
+          label="操作"
+          align="center"
+          min-width="150"
+          class-name="small-padding fixed-width"
+        >
+          <template slot-scope="{ row, $index }">
+            <el-button
+              type="primary"
+              size="mini"
+              @click="updatePermission(row, $index)"
+              >修改</el-button
+            >
+            <el-button
+              type="danger"
+              size="mini"
+              @click="deletePermission(row, $index)"
+              >删除</el-button
+            >
+          </template>
         </el-table-column>
-        <el-table-column prop="name" label="姓名" width="180">
+        <el-table-column prop="name" label="权限名称" align="center">
         </el-table-column>
-        <el-table-column prop="address" label="地址"> </el-table-column>
+        <el-table-column prop="code" label="权限编码" align="center">
+        </el-table-column>
+        <el-table-column prop="createTime" label="创建时间" align="center">
+        </el-table-column>
+        <el-table-column prop="memo" label="备注" align="center">
+        </el-table-column>
+        <el-table-column prop="isAllow" align="center" label="启用">
+          <template slot-scope="scope">
+            <span>{{ scope.row.isAllow == true ? "是" : 否 }}</span>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
     <!-- 新增 form  -->
@@ -155,12 +199,68 @@
         <el-button type="primary" @click="submit('form')">确 定</el-button>
       </div>
     </el-dialog>
+
+    <!-- 权限的弹窗 -->
+    <el-dialog
+      :title="permissionFormTitle"
+      @close="closePermissionForm('permissionForm')"
+      :destroy-on-close="true"
+      width="450px"
+      :visible.sync="dialogPermissionFormVisible"
+      :close-on-click-modal="false"
+    >
+      <el-form
+        :model="permissionForm"
+        ref="permissionForm"
+        :rules="permissionRules"
+      >
+        <el-form-item
+          label="权限名称"
+          prop="name"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model.trim="permissionForm.name"
+            autocomplete="off"
+            placeholder="请输入名称"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="权限编码"
+          prop="code"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model.trim="permissionForm.code"
+            autocomplete="off"
+            placeholder="请输入编码"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="备注" :label-width="formLabelWidth">
+          <el-input
+            v-model.trim="permissionForm.memo"
+            autocomplete="off"
+            placeholder=""
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogPermissionFormVisible = false"
+          >取 消</el-button
+        >
+        <el-button type="primary" @click="submitPermission('permissionForm')"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 
 <script>
 import { open, close } from "@/utils/loading";
+import chooseIcon from "../../layout/components/icon/index";
+//菜单
 import {
   getMenuTree,
   isExistsName,
@@ -169,8 +269,20 @@ import {
   addMenu,
   updateMenu,
 } from "@/api/menu";
+//权限
+import {
+  getMenuPermission,
+  isExistsCode,
+  addPermission,
+  updatePermission,
+  deletePermission,
+  detailsPermission,
+} from "@/api/permission";
 let id = 1000;
 export default {
+  components: {
+    chooseIcon,
+  },
   data() {
     //验证菜单名称
     var validateName = (rule, value, callback) => {
@@ -197,10 +309,31 @@ export default {
         callback();
       }
     };
+    //验证权限的code
+    var validPermissionCode = (rule, value, callback) => {
+      if (value === "" || value === null) {
+        callback("请输入编码");
+      } else {
+        var data = { code: value, id: this.permissionForm.id };
+        isExistsCode(data).then((res) => {
+          if (res.data.data) {
+            callback("编码已存在");
+          } else {
+            callback();
+          }
+        });
+      }
+    };
     return {
       filterText: "",
-      formTitle: "", //表单标题
-      data: [],
+      formTitle: "", //菜单表单标题
+      dialogFormVisible: false, //菜单表单显示隐藏
+      //表单验证
+      rules: {
+        name: [{ required: true, validator: validateName, trigger: "blur" }],
+        url: [{ required: true, validator: validUrl, trigger: "blur" }],
+        sort: [{ required: true, message: "请输入排序", trigger: "blur" }],
+      },
       form: {
         id: 0,
         name: "", //菜单名称
@@ -212,27 +345,30 @@ export default {
         isAllow: true, //是否启用
         idParent: "", //父级id
       },
-      formLabelWidth: "80px",
-      //表单验证
-
-      rules: {
-        name: [{ required: true, validator: validateName, trigger: "blur" }],
-        url: [{ required: true, validator: validUrl, trigger: "blur" }],
-        sort: [{ required: true, message: "请输入排序", trigger: "blur" }],
+      permissionFormTitle: "", //权限表单的标题
+      dialogPermissionFormVisible: false, //权限表单显示隐藏
+      permissionForm: {
+        id: 0,
+        name: "",
+        code: "",
+        menuId: 0,
+        memo: "",
       },
+      permissionRules: {
+        name: [{ required: true, message: "请输入名称", trigger: "blur" }],
+        code: [
+          { required: true, validator: validPermissionCode, trigger: "blur" },
+        ],
+      },
+      data: [],
+      formLabelWidth: "80px",
       defaultProps: {
         children: "childrens",
         label: "name",
       },
-      dialogFormVisible: false,
+      ClickKey: 0, //单击菜单
       dialogVisible: false,
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-      ],
+      tableData: [],
     };
   },
   watch: {
@@ -325,7 +461,25 @@ export default {
     },
     //点击树节点
     handkeNodeClikc(data) {
-      console.log(data);
+      this.ClickKey = data.id;
+      this.getPermissionData(data.id);
+    },
+    getPermissionData(id) {
+      var data = { menuId: id };
+      getMenuPermission(data)
+        .then((res) => {
+          this.tableData = res.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    clickKeyClass(data) {
+      if (this.ClickKey === data.id) {
+        return true;
+      } else {
+        return false;
+      }
     },
     //#region 新增子菜单
     //新增子菜单
@@ -392,30 +546,86 @@ export default {
           // });
         });
     },
-
-    renderContent(h, { node, data, store }) {
-      return (
-        <span class="custom-tree-node">
-          <span>{node.label}</span>
-          <span>
-            <el-button
-              size="mini"
-              type="text"
-              on-click={() => this.append(data)}
-            >
-              Append
-            </el-button>
-            <el-button
-              size="mini"
-              type="text"
-              on-click={() => this.remove(node, data)}
-            >
-              Delete
-            </el-button>
-          </span>
-        </span>
-      );
+    //#region  权限管理
+    /*
+     * 关闭权限弹窗时间
+     */
+    closePermissionForm(permissionForm) {
+      this.$refs[permissionForm].resetFields();
     },
+    /**
+     * 提交权限表单（新增修改）
+     */
+    submitPermission(permissionForm) {
+      console.log(this.permissionForm);
+      this.$refs[permissionForm].validate((vaild) => {
+        debugger;
+        let form = this.permissionForm;
+        if (vaild) {
+          open();
+          if (form.id === 0) {
+            //新增
+            console.log(this.permissionForm);
+            addPermission(this.permissionForm)
+              .then((res) => {
+                this.$message({
+                  type: "success",
+                  message: res.data.errMsg,
+                });
+                this.dialogPermissionFormVisible = false;
+                this.getPermissionData(this.ClickKey);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          } else {
+            //更新
+            updatePermission(form)
+              .then((res) => {
+                this.$message({
+                  type: "success",
+                  message: res.data.errMsg,
+                });
+              })
+              .catch((err) => {
+                console.log("update permission err" + err);
+              });
+          }
+          //关闭
+          close();
+        }
+      });
+    },
+    /**
+     * 新增权限
+     */
+    addPermission() {
+      if (this.ClickKey === 0) {
+        this.$message({
+          type: "success",
+          message: "请先选中一个菜单！",
+        });
+      } else {
+        this.dialogPermissionFormVisible = true;
+        this.permissionForm.menuId = this.ClickKey;
+      }
+    },
+    /**
+     * 修改权限
+     */
+    updatePermission() {},
+    /**
+     * 删除权限
+     */
+    deletePermission() {},
+    /**
+     * 获取树节点选中
+     */
+    getCheckedNodes() {
+      var nodes = this.$refs.tree.getCheckedKeys();
+      console.log(nodes);
+    },
+    //#endregion
   },
 };
 </script>
@@ -424,12 +634,12 @@ export default {
 .menu-right {
   width: 48%;
   position: absolute;
-  left: 50%;
+  left: 43%;
 }
 .menu-left {
   position: absolute;
-  height: 100%;
-  width: 48%;
+  height: 500px;
+  width: 40%;
   border-right: 1px solid #dcdfe6;
   .el-input {
     width: 50%;
@@ -442,6 +652,9 @@ export default {
   justify-content: space-between;
   font-size: 14px;
   padding-right: 8px;
+}
+.tree-span {
+  color: #409eff;
 }
 //输入框宽度
 .el-input__inner {
