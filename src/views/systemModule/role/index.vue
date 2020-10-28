@@ -1,9 +1,10 @@
 <template>
   <div class="app-container">
+    <!-- 搜索 -->
     <div class="filter-container">
       <el-input
         v-model="listQuery.title"
-        placeholder="Title"
+        placeholder="请输入角色名"
         style="width: 200px"
         class="filter-item"
         @keyup.enter.native="handleFilter"
@@ -28,7 +29,7 @@
         </el-button>
       </div>
     </div>
-
+    <!-- 数据表格 -->
     <el-table
       :key="tableKey"
       v-loading="listLoading"
@@ -37,7 +38,6 @@
       fit
       highlight-current-row
       style="width: 100%"
-      @sort-change="sortChange"
     >
       <el-table-column type="index" width="50" align="center" label="序号">
       </el-table-column>
@@ -56,7 +56,7 @@
           <span>{{ row.memo }}</span>
         </template>
       </el-table-column>
-
+      <!-- 数据操作 -->
       <el-table-column
         label="操作"
         align="center"
@@ -64,6 +64,14 @@
         class-name="small-padding fixed-width"
       >
         <template slot-scope="{ row, $index }">
+          <el-button
+            type="success"
+            size="mini"
+            icon="el-icon-share"
+            @click="handleUpdate(row)"
+          >
+            分配权限
+          </el-button>
           <el-button type="success" size="mini" @click="handleUpdate(row)">
             查看
           </el-button>
@@ -81,7 +89,7 @@
         </template>
       </el-table-column>
     </el-table>
-
+    <!-- 分页 -->
     <pagination
       v-show="count > 0"
       :total="count"
@@ -89,55 +97,23 @@
       :pageSize.sync="listQuery.pageSize"
       @pagination="getList"
     />
-
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form
-        ref="dataForm"
-        :rules="rules"
-        :model="temp"
-        label-position="left"
-        label-width="70px"
-        style="width: 400px; margin-left: 50px"
-      >
-        <el-form-item label="Type" prop="type"> </el-form-item>
-        <el-form-item label="Date" prop="timestamp">
-          <el-date-picker
-            v-model="temp.timestamp"
-            type="datetime"
-            placeholder="Please pick a date"
-          />
-        </el-form-item>
-        <el-form-item label="Title" prop="title">
+    <!-- 表单弹窗 -->
+    <el-dialog
+      :title="textMap[dialogStatus]"
+      :destroy-on-close="true"
+      :visible.sync="dialogFormVisible"
+      :close-on-click-modal="false"
+      width="450px"
+    >
+      <el-form ref="dataForm" :rules="rules" :model="temp">
+        <el-form-item label="角色名" prop="name" label-width="80px">
           <el-input v-model="temp.title" />
         </el-form-item>
-        <el-form-item label="Status">
-          <el-select
-            v-model="temp.status"
-            class="filter-item"
-            placeholder="Please select"
-          >
-            <el-option
-              v-for="item in statusOptions"
-              :key="item"
-              :label="item"
-              :value="item"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="Imp">
-          <el-rate
-            v-model="temp.importance"
-            :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-            :max="3"
-            style="margin-top: 8px"
-          />
-        </el-form-item>
-        <el-form-item label="Remark">
+        <el-form-item label="备注" label-width="80px">
           <el-input
-            v-model="temp.remark"
-            :autosize="{ minRows: 2, maxRows: 4 }"
+            v-model="temp.memo"
             type="textarea"
-            placeholder="Please input"
+            placeholder="请输入备注"
           />
         </el-form-item>
       </el-form>
@@ -181,21 +157,16 @@ import Pagination from "@/components/Pagination"; // secondary package based on 
 export default {
   name: "ComplexTable",
   components: { Pagination },
-  // directives: { waves },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: "success",
-        draft: "info",
-        deleted: "danger",
-      };
-      return statusMap[status];
-    },
-    typeFilter(type) {
-      return calendarTypeKeyValue[type];
-    },
-  },
+
   data() {
+    //验证角色名
+    var validName = (rule, value, callback) => {
+      if (value === "") {
+        callback("角色名不能为空");
+      } else {
+        var data = { name: this.temp.name, id: this.temp.id };
+      }
+    };
     return {
       tableKey: 0,
       list: null,
@@ -209,191 +180,65 @@ export default {
         type: undefined,
         sort: "+id",
       },
-      importanceOptions: [1, 2, 3],
-
-      sortOptions: [
-        { label: "ID Ascending", key: "+id" },
-        { label: "ID Descending", key: "-id" },
-      ],
-      statusOptions: ["published", "draft", "deleted"],
-      showReviewer: false,
       temp: {
-        id: undefined,
-        importance: 1,
-        remark: "",
-        timestamp: new Date(),
-        title: "",
-        type: "",
-        status: "published",
+        id: 0,
+        name: "",
+        memo: "",
       },
       dialogFormVisible: false,
       dialogStatus: "",
       textMap: {
-        update: "Edit",
-        create: "Create",
+        update: "修改",
+        create: "新增",
       },
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        type: [
-          { required: true, message: "type is required", trigger: "change" },
-        ],
-        timestamp: [
-          {
-            type: "date",
-            required: true,
-            message: "timestamp is required",
-            trigger: "change",
-          },
-        ],
-        title: [
-          { required: true, message: "title is required", trigger: "blur" },
-        ],
+        name: [{ required: true, validator: validName, trigger: "blur" }],
       },
-      downloadLoading: false,
     };
   },
   created() {
+    //加载列表
     this.getList();
   },
   methods: {
+    //获取列表数据
     getList() {
+      //表格加载
       this.listLoading = true;
+      //请求角色分页结构
       getDataList(this.listQuery)
         .then((response) => {
-          console.log(response);
+          //列表数据
           this.list = response.data.data.data;
-          console.log(this.list);
+          //数据数量
           this.count = response.data.data.count;
           setTimeout(() => {
             this.listLoading = false;
-          }, 1.5 * 1000);
+          }, 1 * 1000);
         })
         .catch((err) => {
           this.listLoading = false;
         });
     },
+    //搜索
     handleFilter() {
       this.listQuery.page = 1;
       this.getList();
     },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: "操作Success",
-        type: "success",
-      });
-      row.status = status;
-    },
-    sortChange(data) {
-      const { prop, order } = data;
-      if (prop === "id") {
-        this.sortByID(order);
-      }
-    },
-    sortByID(order) {
-      if (order === "ascending") {
-        this.listQuery.sort = "+id";
-      } else {
-        this.listQuery.sort = "-id";
-      }
-      this.handleFilter();
-    },
-    resetTemp() {
-      this.temp = {
-        id: undefined,
-        importance: 1,
-        remark: "",
-        timestamp: new Date(),
-        title: "",
-        status: "published",
-        type: "",
-      };
-    },
+
     handleCreate() {
-      this.resetTemp();
       this.dialogStatus = "create";
       this.dialogFormVisible = true;
       this.$nextTick(() => {
         this.$refs["dataForm"].clearValidate();
       });
     },
-    createData() {
-      this.$refs["dataForm"].validate((valid) => {
-        if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024; // mock a id
-          this.temp.author = "vue-element-admin";
-          createArticle(this.temp).then(() => {
-            this.list.unshift(this.temp);
-            this.dialogFormVisible = false;
-            this.$notify({
-              title: "Success",
-              message: "Created Successfully",
-              type: "success",
-              duration: 2000,
-            });
-          });
-        }
-      });
-    },
-    handleUpdate(row) {
-      this.temp = Object.assign({}, row); // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp);
-      this.dialogStatus = "update";
-      this.dialogFormVisible = true;
-      this.$nextTick(() => {
-        this.$refs["dataForm"].clearValidate();
-      });
-    },
-    updateData() {
-      this.$refs["dataForm"].validate((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.temp);
-          tempData.timestamp = +new Date(tempData.timestamp); // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
-            const index = this.list.findIndex((v) => v.id === this.temp.id);
-            this.list.splice(index, 1, this.temp);
-            this.dialogFormVisible = false;
-            this.$notify({
-              title: "Success",
-              message: "Update Successfully",
-              type: "success",
-              duration: 2000,
-            });
-          });
-        }
-      });
-    },
-    handleDelete(row, index) {
-      this.$notify({
-        title: "Success",
-        message: "Delete Successfully",
-        type: "success",
-        duration: 2000,
-      });
-      this.list.splice(index, 1);
-    },
-    handleFetchPv(pv) {
-      fetchPv(pv).then((response) => {
-        this.pvData = response.data.pvData;
-        this.dialogPvVisible = true;
-      });
-    },
-    handleDownload() {},
-    // formatJson(filterVal) {
-    //   return this.list.map((v) =>
-    //     filterVal.map((j) => {
-    //       if (j === "timestamp") {
-    //         return parseTime(v[j]);
-    //       } else {
-    //         return v[j];
-    //       }
-    //     })
-    //   );
-    // },
-    getSortClass: function (key) {
-      const sort = this.listQuery.sort;
-      return sort === `+${key}` ? "ascending" : "descending";
-    },
+    createData() {},
+    handleUpdate(row) {},
+    updateData() {},
+    handleDelete(row, index) {},
   },
 };
 </script>
