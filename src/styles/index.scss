@@ -132,7 +132,7 @@ aside {
 }
 
 .pagination-container {
-  margin-top: 30px;
+  // margin-top: 30px;
   text-align: center;
 }
 
@@ -182,7 +182,7 @@ aside {
 
 .filter-container {
   padding-bottom: 10px;
-
+  position: relative;
   .filter-item {
     display: inline-block;
     vertical-align: middle;

@@ -83,6 +83,8 @@ export default {
 .avater {
   position: absolute;
   right: 50px;
+  width: 50px;
+  height: 50px;
 }
 .line {
   width: 100px;

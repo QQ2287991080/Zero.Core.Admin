@@ -37,7 +37,7 @@ export default {
 //   // }
 // }
 .fixed-header + .app-main {
-  padding-top: 50px;
+  padding-top: 20px;
 }
 </style>
 

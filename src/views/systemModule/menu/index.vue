@@ -124,11 +124,11 @@
         </el-table-column>
         <el-table-column prop="memo" label="备注" align="center">
         </el-table-column>
-        <el-table-column prop="isAllow" align="center" label="启用">
+        <!-- <el-table-column prop="isAllow" align="center" label="启用">
           <template slot-scope="scope">
             <span>{{ scope.row.isAllow == true ? "是" : 否 }}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
     </div>
     <!-- 新增 form  -->
@@ -236,9 +236,21 @@
             placeholder="请输入编码"
           ></el-input>
         </el-form-item>
-        <el-form-item label="备注" :label-width="formLabelWidth">
+        <el-form-item label="备注" prop="memo" :label-width="formLabelWidth">
           <el-input
             v-model.trim="permissionForm.memo"
+            autocomplete="off"
+            placeholder=""
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          style="display: none"
+          label="菜单id"
+          prop="menuId"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model.trim="permissionForm.menuId"
             autocomplete="off"
             placeholder=""
           ></el-input>
@@ -275,7 +287,7 @@ import {
   isExistsCode,
   addPermission,
   updatePermission,
-  deletePermission,
+  removePermission,
   detailsPermission,
 } from "@/api/permission";
 let id = 1000;
@@ -331,7 +343,7 @@ export default {
       //表单验证
       rules: {
         name: [{ required: true, validator: validateName, trigger: "blur" }],
-        url: [{ required: true, validator: validUrl, trigger: "blur" }],
+        // url: [{ required: true, validator: validUrl, trigger: "blur" }],
         sort: [{ required: true, message: "请输入排序", trigger: "blur" }],
       },
       form: {
@@ -462,10 +474,10 @@ export default {
     //点击树节点
     handkeNodeClikc(data) {
       this.ClickKey = data.id;
-      this.getPermissionData(data.id);
+      this.getPermissionData();
     },
-    getPermissionData(id) {
-      var data = { menuId: id };
+    getPermissionData() {
+      var data = { menuId: this.ClickKey };
       getMenuPermission(data)
         .then((res) => {
           this.tableData = res.data.data;
@@ -551,7 +563,9 @@ export default {
      * 关闭权限弹窗时间
      */
     closePermissionForm(permissionForm) {
-      this.$refs[permissionForm].resetFields();
+      this.$nextTick(() => {
+        this.$refs[permissionForm].resetFields();
+      });
     },
     /**
      * 提交权限表单（新增修改）
@@ -559,7 +573,6 @@ export default {
     submitPermission(permissionForm) {
       console.log(this.permissionForm);
       this.$refs[permissionForm].validate((vaild) => {
-        debugger;
         let form = this.permissionForm;
         if (vaild) {
           open();
@@ -573,7 +586,7 @@ export default {
                   message: res.data.errMsg,
                 });
                 this.dialogPermissionFormVisible = false;
-                this.getPermissionData(this.ClickKey);
+                this.getPermissionData();
               })
               .catch((err) => {
                 console.log(err);
@@ -586,6 +599,8 @@ export default {
                   type: "success",
                   message: res.data.errMsg,
                 });
+                this.dialogPermissionFormVisible = false;
+                this.getPermissionData();
               })
               .catch((err) => {
                 console.log("update permission err" + err);
@@ -606,24 +621,65 @@ export default {
           message: "请先选中一个菜单！",
         });
       } else {
-        this.dialogPermissionFormVisible = true;
-        this.permissionForm.menuId = this.ClickKey;
+        this.$nextTick(() => {
+          // this.$refs["permissionForm"].resetFields();
+          this.permissionFormTitle = "新增权限";
+          this.dialogPermissionFormVisible = true;
+          this.permissionForm.menuId = this.ClickKey;
+          this.permissionForm.id = 0;
+        });
       }
     },
     /**
      * 修改权限
      */
-    updatePermission() {},
+    updatePermission(row, index) {
+      this.permissionFormTitle = "修改权限";
+      this.dialogPermissionFormVisible = true;
+      this.permissionForm.menuId = this.ClickKey;
+      this.$nextTick(() => {
+        this.$refs["permissionForm"].resetFields();
+        this.permissionForm.menuId = this.ClickKey;
+        this.permissionForm.memo = row.memo;
+        this.permissionForm.code = row.code;
+        this.permissionForm.name = row.name;
+        this.permissionForm.id = row.id;
+      });
+    },
     /**
      * 删除权限
      */
-    deletePermission() {},
-    /**
-     * 获取树节点选中
-     */
-    getCheckedNodes() {
-      var nodes = this.$refs.tree.getCheckedKeys();
-      console.log(nodes);
+    deletePermission(row, index) {
+      this.$confirm(
+        "此操作将永久删除该数据，可能会导致权限操作出现问题, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          //删除权限
+          console.log(row.id);
+          removePermission(row.id)
+            .then((res) => {
+              if (res.data.errCode == 200) {
+                this.$message({
+                  type: "success",
+                  message: "删除成功!",
+                });
+                //更新权限列表
+                this.getPermissionData();
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     //#endregion
   },

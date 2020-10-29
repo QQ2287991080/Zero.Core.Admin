@@ -49,11 +49,12 @@ export function updatePermission(form) {
  * 删除权限
  * @param {权限id} id
  */
-export function deleltePermission(id) {
+export function removePermission(id) {
+  var data = { id: id }
   return request({
     url: '/api/permission/delete',
     method: 'get',
-    params: id,
+    params: data,
   })
 }
 /**
