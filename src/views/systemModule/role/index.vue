@@ -42,6 +42,11 @@
       style="width: 100%"
     >
       <el-table-column type="index" width="50" align="center" label="序号">
+        <template slot-scope="{ $index }">
+          <span>{{
+            $index + 1 + (listQuery.pageIndex - 1) * listQuery.pageSize
+          }}</span>
+        </template>
       </el-table-column>
       <el-table-column label="角色名称" min-width="150px" align="center">
         <template slot-scope="{ row }">
@@ -148,25 +153,28 @@
       title="分配权限"
     >
       <div class="dialog-permission-style">
-        <!-- <el-checkbox-group v-model="checkedMenu"> -->
         <!-- 菜单 -->
         <div v-for="item in menus" :key="item.id">
-          <!-- <el-checkbox>{{ item.name }}</el-checkbox> -->
-          <span>{{ item.name }}</span>
+          <el-checkbox
+            @change="checkChangeMenu(item)"
+            :checked="isCheckedMenuFun(item.id)"
+            >{{ item.name }}</el-checkbox
+          >
+          <!-- <span>{{ item.name }}</span> -->
           <div class="checkbox" :if="item.children.length > 0">
             <el-checkbox
               v-for="child in item.children"
               @change="checkChangePermission(child)"
+              :checked="isCheckedPermissionFun(child.id)"
               :key="child.id"
               >{{ child.name }}</el-checkbox
             >
           </div>
         </div>
-        <!-- </el-checkbox-group> -->
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogPermission = false"> 关闭 </el-button>
-        <el-button type="primary"> 提交 </el-button>
+        <el-button @click="submitPermission" type="primary"> 提交 </el-button>
       </div>
     </el-dialog>
   </div>
@@ -246,15 +254,29 @@ export default {
       isDisabled: false,
       //分配权限
       dialogPermission: false,
+      roleId: 0, //选中角色id
       //菜单
       menus: [],
       //已选中菜单
       checkedMenu: [],
+      //已选中得权限
+      checkedPermission: [],
+      //已存在的权限id
+      menuids: [],
+      permissionIds: [],
     };
   },
   created() {
     //加载列表
     this.getList();
+  },
+  watch: {
+    checkedMenu() {
+      return this.checkedMenu;
+    },
+    checkedPermission() {
+      return this.checkedPermission;
+    },
   },
   methods: {
     //获取列表数据
@@ -278,7 +300,6 @@ export default {
     },
     //搜索
     handleFilter() {
-      this.listQuery.page = 1;
       this.getList();
     },
     /**
@@ -415,7 +436,7 @@ export default {
      * 分配权限 获取能分配的菜单和权限
      */
     handlePermission(row, index) {
-      this.dialogPermission = true;
+      this.getRoleExistsPermissionData(row.id);
       //请求接口
       getMenuPermission()
         .then((res) => {
@@ -425,14 +446,128 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+
+      // setTimeout(() => {
+
+      // }, 0.5 * 1000);
+
+      this.roleId = row.id;
+      this.dialogPermission = true;
     },
+    /**
+     * 获取角色已经存在的角色权限
+     */
+    getRoleExistsPermissionData(id) {
+      open();
+      //调用接口
+      getRoleExistsPermission(id)
+        .then((res) => {
+          console.log(res.data);
+          //将已存在的菜单id赋值给数组，避免选中的时候判断错误
+          this.$nextTick(() => {
+            this.checkedMenu = res.data.data.menuIds ?? [];
+            this.checkedPermission = res.data.data.permissions ?? [];
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      close();
+    },
+    /**
+     * 判断菜单是否已选中
+     */
+    isCheckedMenuFun(id) {
+      var index = this.checkedMenu.indexOf(id);
+      let ok = index >= 0 ? true : false;
+      return ok;
+    },
+    /**
+     * 判断权限是否选中
+     */
+    isCheckedPermissionFun(id) {
+      var index = this.checkedPermission.indexOf(id);
+      let ok = index >= 0 ? true : false;
+      return ok;
+    },
+    /**
+     * 点击权限change事件
+     */
     checkChangePermission(value) {
-      console.log(value);
+      let check = this.checkedPermission;
+      let permissionId = value.id;
+      const index = check.indexOf(permissionId);
+      if (index < 0) {
+        this.checkedPermission.push(permissionId);
+      } else {
+        this.checkedPermission.splice(index);
+      }
+    },
+    /**
+     * 点击菜单change事件
+     */
+    checkChangeMenu(value) {
+      let check = this.checkedMenu;
+      let menuId = value.id;
+      console.log(check);
+      const index = check.indexOf(menuId);
+      if (index < 0) {
+        this.checkedMenu.push(menuId);
+      } else {
+        this.checkedMenu.splice(index);
+      }
+    },
+
+    /**
+     * 提交权限分配
+     */
+    submitPermission() {
+      //拼接请求对象
+      var data = {
+        roleId: this.roleId,
+        menus: this.checkedMenu,
+        permissions: this.checkedPermission,
+      };
+      console.log(data);
+      if (data.roleId === 0) {
+        console.log("roleid connot zero");
+      } else {
+        //保存
+        open();
+        setPermission(data)
+          .then((res) => {
+            console.log(res);
+            if (res.data.errCode === 200) {
+              this.$message({
+                type: "success",
+                message: res.data.errMsg,
+              });
+              //关闭弹窗
+              this.dialogPermission = false;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        close();
+      }
     },
     /**
      * 关闭分配权限弹窗
      */
-    closePermission() {},
+    closePermission() {
+      //已选中菜单
+      this.checkedMenu = [];
+      //已选中得权限
+      this.checkedPermission = [];
+      //选中角色id
+      this.roleId = 0;
+      //菜单
+      this.menus = [];
+      //已存在的权限id
+      this.menuids = [];
+      this.permissionIds = [];
+    },
   },
 };
 </script>

@@ -47,14 +47,13 @@ export default {
     //tag右键事件
 
     handleClickContextMenu(e) {
-      console.log(e);
       if (e.srcElement.id) {
         //截取右键tab的路由
         let currentContextTabId = e.srcElement.id.substring(4);
         this.tagIndex = currentContextTabId;
         this.contextMenuVisible = true;
         //this.$store.commit("saveCurContextTabId", currentContextTabId);
-        this.menuLeft = e.layerX + "px";
+        this.menuLeft = e.clientX - 200 + "px";
         this.menuTop = e.layerY + 100 + "px";
       }
     },
@@ -87,7 +86,8 @@ export default {
     //右键菜单
     //刷新
     refresh() {
-      this.$router.push({ path: this.tagIndex });
+      // location.reload();
+      // this.$router.push({ path: this.tagIndex });
     },
     //关闭
     close() {

@@ -121,6 +121,16 @@ aside {
   }
 }
 
+/* 对其el table的线*/
+body .el-table th.gutter{
+  display: table-cell!important;
+}
+
+body .el-table colgroup.gutter{
+  display: table-cell!important;
+}
+/* 对其el table的线*/
+
 //main-container全局样式
 .app-container {
   padding: 20px;
