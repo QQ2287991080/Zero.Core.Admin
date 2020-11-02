@@ -55,6 +55,29 @@ export function getData(condition) {
     data: condition,
   })
 }
+/**
+ *更改用户状态
+ * @param {用户id,true/false} data
+ */
+export function changeLock(data) {
+  return request({
+    url: '/api/user/changeLock',
+    method: 'get',
+    params: data,
+  })
+}
+
+/**
+ * 判断用户名是否已存在
+ * @param {用户名，id} data
+ */
+export function IsUserNameExists(data) {
+  return request({
+    url: '/api/user/IsUserNameExists',
+    method: 'get',
+    params: data,
+  })
+}
 
 /**
  *新增用户
@@ -109,12 +132,10 @@ export function deleteUser(id) {
 
 //#region  role
 /**
- *
- * @param {用户id} userId
- * @param {角色id} roleId
+ *绑定角色
+ * @param {*} data
  */
-export function setRole(userId, roleId) {
-  var data = { userId, roleId }
+export function setRole(data) {
   return request({
     url: '/api/user/setRole',
     method: 'get',
@@ -123,12 +144,10 @@ export function setRole(userId, roleId) {
 }
 
 /**
- *
- * @param {用户id} userId
- * @param {角色id} roleId
+ * 解除绑定
+ * @param {*} data
  */
-export function removeRole(userId, roleId) {
-  var data = { userId, roleId }
+export function removeRole(data) {
   return request({
     url: '/api/user/removeRole',
     method: 'get',
@@ -143,7 +162,7 @@ export function removeRole(userId, roleId) {
 export function getUserRole(userId) {
   var data = { userId }
   return request({
-    url: '/api/user/setRole',
+    url: '/api/user/getUserRole',
     method: 'get',
     params: data,
   })

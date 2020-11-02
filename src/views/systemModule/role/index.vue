@@ -271,12 +271,12 @@ export default {
     this.getList();
   },
   watch: {
-    checkedMenu() {
-      return this.checkedMenu;
-    },
-    checkedPermission() {
-      return this.checkedPermission;
-    },
+    // checkedMenu() {
+    //   return this.checkedMenu;
+    // },
+    // checkedPermission() {
+    //   return this.checkedPermission;
+    // },
   },
   methods: {
     //获取列表数据
@@ -440,7 +440,6 @@ export default {
       //请求接口
       getMenuPermission()
         .then((res) => {
-          console.log(res.data);
           this.menus = res.data.data;
         })
         .catch((err) => {
@@ -462,7 +461,6 @@ export default {
       //调用接口
       getRoleExistsPermission(id)
         .then((res) => {
-          console.log(res.data);
           //将已存在的菜单id赋值给数组，避免选中的时候判断错误
           this.$nextTick(() => {
             this.checkedMenu = res.data.data.menuIds ?? [];
@@ -480,6 +478,7 @@ export default {
     isCheckedMenuFun(id) {
       var index = this.checkedMenu.indexOf(id);
       let ok = index >= 0 ? true : false;
+      console.log(ok);
       return ok;
     },
     /**

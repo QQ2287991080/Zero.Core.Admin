@@ -12,6 +12,15 @@ export function getDataList(parameter) {
   })
 }
 /**
+ * 获取角色列表的部分信息
+ */
+export function getShortDataList() {
+  return request({
+    url: '/api/role/getShortDataList',
+    method: 'get',
+  })
+}
+/**
  *
  * @param {角色名和id} data
  */
