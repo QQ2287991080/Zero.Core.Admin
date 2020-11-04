@@ -79,7 +79,15 @@ export const routes = [
       iconType: 'el',
     },
     children: [
-      
+      {
+        path: '/system/dictionary',
+        component: () => import('@/views/systemModule/diction'),
+        meta: {
+          title: '字典管理',
+          icon: "full-screen",
+          iconType: 'el',
+        },
+      },
       {
         path: '/system/role',
         component: () => import('@/views/systemModule/role'),
