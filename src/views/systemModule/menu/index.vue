@@ -156,7 +156,12 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="排序" prop="sort" :label-width="formLabelWidth">
-          <el-input v-model="form.sort" autocomplete="off"></el-input>
+          <el-input
+            v-model="form.sort"
+            maxlength="2"
+            autocomplete="off"
+            placeholder="请输入排序0-99"
+          ></el-input>
         </el-form-item>
         <el-form-item label="启用" :label-width="formLabelWidth">
           <el-radio v-model="form.isAllow" :label="true">启用</el-radio>

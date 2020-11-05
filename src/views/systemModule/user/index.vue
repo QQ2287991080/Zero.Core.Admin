@@ -429,7 +429,6 @@ export default {
     },
     //分配角色
     handleRole(row) {
-      console.log("xxxx");
       this.getUserBindRole(row.id);
       this.getRoles();
       this.bindUserId = row.id;

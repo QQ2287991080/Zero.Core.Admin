@@ -44,6 +44,8 @@ export default {
     };
   },
   methods: {
+    //
+
     //tag右键事件
 
     handleClickContextMenu(e) {
@@ -127,12 +129,27 @@ export default {
   },
   computed: {
     options() {
-      return store.getters.options;
+      let urls = store.getters.menuUrls;
+      var result = store.getters.options.filter((item) => {
+        var index = urls.indexOf(item.path);
+        if (index >= 0) {
+          return item;
+        } else {
+          //store.dispatch("deleteTab", item.path);
+        }
+      });
+      return result;
     },
     activeIndex: {
       get() {
         // return store.getters.activeIndex;
-        return store.getters.activeIndex;
+        if (
+          this.options.indexOf((f) => f.path == store.getters.activeIndex) < 0
+        ) {
+          return store.getters.activeIndex;
+        } else {
+          this.$router.push({ path: "/dashboard" });
+        }
       },
       set(val) {
         this.$store.commit("set_active_index", val);

@@ -15,7 +15,7 @@ import './icons/index'
 import './setup/ThirdUI'
 import '@/styles/index.scss'
 //#endregion
-
+import test from './test'
 
 //#region  解决 Avoided redundant navigation to current location 错误
 Vue.config.productionTip = false

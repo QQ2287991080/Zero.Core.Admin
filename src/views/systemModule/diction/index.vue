@@ -28,6 +28,7 @@
                   placement="top-start"
                 >
                   <el-button
+                    v-show="() => allow('dic_addchild')"
                     type="text"
                     icon="el-icon-bottom"
                     @click="() => appendChildren(data)"
@@ -96,6 +97,22 @@
             placeholder="请输入名称"
           ></el-input>
         </el-form-item>
+
+        <el-form-item label="排序" prop="sort" :label-width="formLabelWidth">
+          <el-input
+            v-model.trim="form.sort"
+            maxlength="2"
+            autocomplete="off"
+            placeholder="请输入排序0-99"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="备注" prop="memo" :label-width="formLabelWidth">
+          <el-input
+            v-model.trim="form.memo"
+            autocomplete="off"
+            placeholder="请输入备注"
+          ></el-input>
+        </el-form-item>
         <el-form-item
           label="父级id"
           style="display: none"
@@ -107,7 +124,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submit('form')">确 定</el-button>
+        <el-button type="primary" @click="submit()">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -121,17 +138,23 @@ import {
   dicDelete,
   isContains,
 } from "@/api/diction";
+import { open, close } from "@/utils/loading";
+import { allow } from "@/utils/roleAuth";
 export default {
   data() {
-    //验证菜单名称
+    //验证名称
     var validateName = (rule, value, callback) => {
       if (value === "" || value === null) {
         callback(new Error("请输入名称"));
       } else {
+        if (this.form.parentName === value) {
+          callback(new Error("不能和父级名称相同"));
+        }
         var id = this.form.id;
         var idParent = this.form.idParent;
         //调取接口
         var validateData = { name: value, id, idParent };
+        console.log(validateData);
         isContains(validateData).then((res) => {
           let any = res.data.data;
           if (any) {
@@ -142,12 +165,13 @@ export default {
         });
       }
     };
+
     return {
       filterText: "",
       title: "",
       text: {
-        child: "新增子菜单",
-        create: "新增",
+        child: "新增子节点",
+        create: "新增同级节点",
         update: "修改",
       },
       dialogFormVisible: false,
@@ -162,34 +186,51 @@ export default {
         memo: "", //备注
         sort: 0, //排序
         idParent: "", //父级id
+        parentName: "", //父级名称
       },
-      data: [
-        {
-          name: "测试节点",
-          childrens: [{ name: "测试节点子节点" }],
-        },
-        {
-          name: "测试节点2",
-        },
-      ],
+      data: [],
       formLabelWidth: "80px",
       defaultProps: {
         children: "childrens",
         label: "name",
       },
       ClickKey: 0, //单击菜单
-      dialogVisible: false,
-      tableData: [],
+
+      // allow: false,
     };
   },
+  watch: {
+    //树--关键字搜索
+    filterText(val) {
+      this.$refs.tree.filter(val);
+    },
+  },
+  created() {
+    //加载树
+    this.getDicTree();
+    // this.allow = allow("dic_addchild");
+  },
   methods: {
+    getDicTree() {
+      open();
+      getTree()
+        .then((res) => {
+          this.data = res.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      close();
+    },
     //过滤节点
     filterNode(value, data) {
       if (!value) return true;
       return data.name.indexOf(value) !== -1;
     },
     //点击树节点
-    handkeNodeClikc(data) {},
+    handkeNodeClikc(data) {
+      this.ClickKey = data.id;
+    },
     //节点样式
     clickKeyClass(data) {
       if (this.ClickKey === data.id) {
@@ -198,13 +239,16 @@ export default {
         return false;
       }
     },
-    //窗体关闭时间
+    //窗体关闭
     closeForm(form) {
+      console.log("close");
       this.$refs[form].resetFields();
     },
     //新增子节点
     appendChildren(data) {
       this.dialogFormVisible = true;
+      this.form.idParent = data.id;
+      this.form.parentName = data.name;
       this.title = "child";
     },
     //新增节点
@@ -212,10 +256,61 @@ export default {
       this.dialogFormVisible = true;
       this.title = "create";
     },
+    //新增
+    createData() {
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          open();
+          dicAdd(this.form)
+            .then((res) => {
+              console.log(res);
+              this.dialogFormVisible = false;
+              this.getDicTree();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+          close();
+        }
+      });
+    },
     //修改节点
     updateTree(data) {
       this.dialogFormVisible = true;
+      this.form.id = data.id;
+      this.form.name = data.name;
+      this.form.idParent = data.idParent;
+      this.form.memo = data.memo;
+      this.form.sort = data.sort;
+      // if (data.idParent != null) {
+      //   this.form.parentName = data.name;
+      // }
       this.title = "update";
+    },
+    updateData() {
+      this.$refs["form"].validate((valid) => {
+        if (valid) {
+          open();
+          dicUpdate(this.form)
+            .then((res) => {
+              console.log(res);
+              this.dialogFormVisible = false;
+              this.getDicTree();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+          close();
+        }
+      });
+    },
+    submit() {
+      let title = this.title;
+      if (title === "create" || title === "child") {
+        this.createData();
+      } else {
+        this.updateData();
+      }
     },
     //删除节点
     remove(node, data) {
@@ -237,7 +332,7 @@ export default {
                   message: "删除成功!",
                 });
                 //更新菜单
-                this.getTree();
+                this.getDicTree();
               }
             })
             .catch((err) => {

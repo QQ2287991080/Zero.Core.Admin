@@ -7,6 +7,7 @@ const getters = {
   avatar: (state) => user.state.avatar, //头像
   permission: (state) => user.state.permission, //权限
   menu: (state) => user.state.menu, //菜单
+  menuUrls: (state) => user.state.menuUrls,
   isCollapse: (state) => app.state.isCollapse,
   options: (state) => tag.state.options,
   activeIndex: (state) => tag.state.activeIndex,

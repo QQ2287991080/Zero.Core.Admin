@@ -31,6 +31,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import store from "@/store/index";
 import sidebarItem from "./menuSidebar";
 
 export default {
@@ -41,13 +42,18 @@ export default {
   },
   components: { sidebarItem },
   computed: {
-    ...mapGetters(["menu", "sidebar"]),
+    //menu
+    // ...mapGetters(["menu"]),
     isCollapse() {
       // return !this.sidebar.opened;
       return false;
     },
+    menu() {
+      return store.getters.menu;
+    },
     path() {
-      return "/" + this.$route.path.split("/")[1];
+      // return "/" + this.$route.path.split("/")[1];
+      return store.getters.activeIndex;
     },
   },
 };

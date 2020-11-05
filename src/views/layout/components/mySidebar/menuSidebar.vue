@@ -13,34 +13,54 @@
       <!--没有子级的列表-->
       <!-- <router-link v-if="!(item.menuItems.length!=0)" :to="item.url"
       :key="item.name">-->
-      <el-menu-item v-if="!(item.children.length!=0)" :index="item.url" :key="item.url">
+      <el-menu-item
+        v-if="!(item.childrens.length != 0)"
+        :index="item.url"
+        :key="item.url"
+        @click="addTags(item.url, item.name)"
+      >
         <!-- <i :class="item.icon"></i> -->
-        <svg-icon :icon-class="item.icon" />
-        <span class="111" slot="title">{{item.name}}</span>
+        <chooseIcon
+          :iconType="item.iconType === 1 ? 'el' : 'svg'"
+          :iconName="item.icon"
+        />
+        <template slot="title">
+          <span class="el-first-menu-span" slot="title">{{ item.name }}</span>
+        </template>
       </el-menu-item>
       <!-- </router-link> -->
       <!--有子级的列表-->
-      <el-submenu v-else :index="item.name||item.id" :key="item.name">
+      <el-submenu v-else :index="item.name || item.id" :key="item.name">
         <template slot="title">
           <!-- <i :class="item.icon"></i> -->
-          <svg-icon :icon-class="item.icon" />
-          <span class="222" slot="title">{{item.name}}</span>
+          <chooseIcon
+            :iconType="item.iconType === 1 ? 'el' : 'svg'"
+            :iconName="item.icon"
+          />
+          <span class="222" slot="title">{{ item.name }}</span>
         </template>
 
-        <template v-for="child in item.children">
+        <template v-for="child in item.childrens">
           <!--下面再有子级时进行递归调用-->
           <sidebar-item
             class="nest-menu"
-            v-if="child.children&&child.children.length>0"
+            v-if="child.childrens && child.childrens.length > 0"
             :menus="[child]"
             :key="child.id"
           ></sidebar-item>
           <!--下面没有子级时进行展示-->
           <!-- <router-link v-else :to="item.id" :key="child.name"> -->
-          <el-menu-item :index="child.url" :key="child.url">
+          <el-menu-item
+            @click="addTags(child.url, child.name)"
+            :index="child.url"
+            :key="child.url"
+          >
             <!-- <i :class="child.icon"></i> -->
-            <svg-icon :icon-class="child.icon" />
-            <span class="333" slot="title">{{child.name}}</span>
+            <chooseIcon
+              :iconType="child.iconType === 1 ? 'el' : 'svg'"
+              :iconName="child.icon"
+            />
+            <span class="333" slot="title">{{ child.name }}</span>
           </el-menu-item>
           <!-- </router-link> -->
         </template>
@@ -49,18 +69,60 @@
   </div>
 </template>
 <script>
+import chooseIcon from "../icon";
+import store from "@/store";
 export default {
+  components: {
+    chooseIcon,
+  },
   name: "sidebarItem",
   props: ["menus"],
+  methods: {},
+  created() {
+    //  console.log(this.menus);
+  },
+  hasOneShowingmenuItems(menuItems) {
+    const showingmenuItems = menuItems.filter((item) => {
+      return !item.hidden;
+    });
+    if (showingmenuItems.length === 1) {
+      return true;
+    }
+    return false;
+  },
   methods: {
-    hasOneShowingmenuItems(menuItems) {
-      const showingmenuItems = menuItems.filter((item) => {
-        return !item.hidden;
+    //将当前路由的路由信息添加到 tabs集合中
+    addTags(path, title) {
+      //单个对象
+      let option = { path: path, name: title };
+      //store中是否存在
+      var flag = true;
+      //循环判断路由是否存在，存在的话更改activeIndex，跳转到对应页面
+      this.options.forEach((element) => {
+        //如果path 存在
+        if (element.path === path) {
+          flag = false;
+        }
       });
-      if (showingmenuItems.length === 1) {
-        return true;
+      if (flag) {
+        //添加
+        store.dispatch("addTab", option);
       }
-      return false;
+    },
+  },
+  computed: {
+    options() {
+      return store.getters.options;
+    },
+  },
+  watch: {
+    //监听路由变化，更新tab的activeIndex
+    $route: {
+      handler: function (route) {
+        //console.log(route.path);
+        store.dispatch("setActiveIndex", route.path);
+      },
+      immediate: true,
     },
   },
 };

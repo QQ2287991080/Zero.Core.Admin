@@ -28,6 +28,9 @@ instance.interceptors.request.use(
     if (token !== null) {
       config.headers.Authorization = `Bearer ${token}`
     }
+    if (process.env.VUE_APP_TEST) {
+      config.headers.Authorization = `Bearer ${process.env.VUE_APP_TOKEN}`
+    }
     return config
   },
   (err) => {

@@ -451,6 +451,7 @@ export default {
       // }, 0.5 * 1000);
 
       this.roleId = row.id;
+
       this.dialogPermission = true;
     },
     /**
@@ -465,12 +466,13 @@ export default {
           this.$nextTick(() => {
             this.checkedMenu = res.data.data.menuIds ?? [];
             this.checkedPermission = res.data.data.permissions ?? [];
+            close();
           });
         })
         .catch((err) => {
           console.log(err);
+          close();
         });
-      close();
     },
     /**
      * 判断菜单是否已选中

@@ -8,6 +8,7 @@ const state = {
   avatar: '', //头像
   permission: [],
   menu: [],
+  menuUrls: [], //已存在的菜单
 }
 //mutations 事件
 const mutations = {
@@ -34,6 +35,9 @@ const mutations = {
   //菜单
   SET_MENU: (state, menu) => {
     state.menu = menu
+  },
+  SET_MENU_URLS: (state, menuUrls) => {
+    state.menuUrls = menuUrls
   },
 }
 
@@ -78,6 +82,7 @@ const actions = {
         commit('SET_PERMISSION', data.permission)
         //菜单
         commit('SET_MENU', data.menu)
+        commit('SET_MENU_URLS', data.menuUrls)
         resolve(data)
       })
     }).catch((err) => {
@@ -103,6 +108,7 @@ const actions = {
             commit('SET_PERMISSION', [])
             //菜单
             commit('SET_MENU', [])
+            commit('SET_MENU_URLS', [])
           }
           resolve()
         })
