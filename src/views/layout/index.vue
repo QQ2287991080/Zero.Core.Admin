@@ -10,18 +10,24 @@
       </div>
       <app-main />
     </div>
+    <!-- 头像下拉菜单 -->
+    <ul class="contextmenu" v-show="avatarMenuVisible">
+      <li href="javascript:;">个人中心</li>
+      <li href="javascript:;">退出</li>
+    </ul>
   </div>
 </template>
 
 <script>
 import appMain from "@/views/layout/components/AppMain"; //页面布局的右侧区域
-//import sidebar from "@/views/layout/components/sidebar"; //页面布局的左侧菜单
-import sidebar from "../layout/components/mySidebar/index";
+import sidebar from "@/views/layout/components/sidebar"; //页面布局的左侧菜单
+// import sidebar from "../layout/components/mySidebar/index";
 import mainHeader from "../layout/components/header/mainHeader"; //头部
 import mainTags from "../layout/components/header/mainTags"; //标签
 import tags from "../layout/components/tags";
 
 import store from "@/store/index";
+import { close } from "../../utils/loading";
 export default {
   name: "layout",
   components: {
@@ -38,6 +44,7 @@ export default {
       fixedHeader: "",
       needTagsView: true,
       menuImg: require("../../assets/menu.png"),
+      visible: false,
     };
   },
   methods: {
@@ -47,15 +54,45 @@ export default {
       store.dispatch("collapse", !collapse);
     },
   },
+
   computed: {
     classObj() {
-      console.log(store.getters.isCollapse);
       return {
         hideSidebar: store.getters.isCollapse,
         openSidebar: !store.getters.isCollapse,
         withoutAnimation: false,
         mobile: "mobile",
       };
+    },
+    avatarMenuVisible: {
+      get() {
+        return store.getters.avatarMenuVisible;
+      },
+      set(val) {
+        store.dispatch("avatarMenuVisible", false);
+      },
+    },
+  },
+  watch: {
+    // avatarMenuVisible(value) {
+    //   window.addEventListener("click", (e) => {
+    //     const target = e.target;
+    //     if (this.visible) {
+    //       console.log("--------------");
+    //       store.dispatch("avatarMenuVisible", true);
+    //     }
+    //   });
+    // },
+
+    avatarMenuVisible() {
+      if (this.avatarMenuVisible) {
+        console.log("--------------");
+        window.addEventListener("click", (e) => {
+          const target = e.target;
+          console.log(e);
+          store.dispatch("avatarMenuVisible", false);
+        });
+      }
     },
   },
 };
@@ -102,5 +139,31 @@ export default {
 
 .mobile .fixed-header {
   width: 100%;
+}
+
+.contextmenu {
+  width: 100px;
+  margin: 0;
+  border: 1px solid #ccc;
+  background: #fff;
+  z-index: 3000;
+  position: absolute;
+  list-style-type: none;
+  padding: 5px 0;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.2);
+  right: 35px;
+  top: 70px;
+  text-align: center;
+}
+.contextmenu li {
+  margin: 0;
+  padding: 7px 16px;
+}
+.contextmenu li:hover {
+  background: #f2f2f2;
+  cursor: pointer;
 }
 </style>

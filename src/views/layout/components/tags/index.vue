@@ -138,18 +138,20 @@ export default {
           //store.dispatch("deleteTab", item.path);
         }
       });
-      return result;
+      // return result;
+      return store.getters.options;
     },
     activeIndex: {
       get() {
         // return store.getters.activeIndex;
-        if (
-          this.options.indexOf((f) => f.path == store.getters.activeIndex) < 0
-        ) {
-          return store.getters.activeIndex;
-        } else {
-          this.$router.push({ path: "/dashboard" });
-        }
+        // if (
+        //   this.options.indexOf((f) => f.path == store.getters.activeIndex) < 0
+        // ) {
+        //   return store.getters.activeIndex;
+        // } else {
+        //   this.$router.push({ path: "/dashboard" });
+        // }
+        return store.getters.activeIndex;
       },
       set(val) {
         this.$store.commit("set_active_index", val);
@@ -199,6 +201,9 @@ export default {
 
 </style>
 <style lang="scss" scoped>
+// .template-tabs {
+//   position: relative;
+// }
 .el-tabs {
   //border: 1px solid red;
   height: 41px;

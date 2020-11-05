@@ -18,7 +18,9 @@
           >
             <span class="custom-tree-node" slot-scope="{ node, data }">
               <span :class="{ 'tree-span': clickKeyClass(data) }"
-                ><i class="el-icon-folder" />{{ data.name }}</span
+                ><i class="el-icon-folder" style="margin-right: 10px" />{{
+                  data.name
+                }}</span
               >
               <span>
                 <el-tooltip
@@ -28,7 +30,7 @@
                   placement="top-start"
                 >
                   <el-button
-                    v-show="() => allow('dic_addchild')"
+                    v-auth="'dic_addchild'"
                     type="text"
                     icon="el-icon-bottom"
                     @click="() => appendChildren(data)"
@@ -139,7 +141,6 @@ import {
   isContains,
 } from "@/api/diction";
 import { open, close } from "@/utils/loading";
-import { allow } from "@/utils/roleAuth";
 export default {
   data() {
     //验证名称
@@ -188,7 +189,11 @@ export default {
         idParent: "", //父级id
         parentName: "", //父级名称
       },
-      data: [],
+      data: [
+        {
+          name: "xxx",
+        },
+      ],
       formLabelWidth: "80px",
       defaultProps: {
         children: "childrens",
@@ -208,7 +213,6 @@ export default {
   created() {
     //加载树
     this.getDicTree();
-    // this.allow = allow("dic_addchild");
   },
   methods: {
     getDicTree() {

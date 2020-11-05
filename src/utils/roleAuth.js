@@ -1,7 +1,18 @@
+import Vue from 'vue'
 import store from '../store'
 
-//验证按钮或者模块是不是允许显示
-export const allow = (code) => {
-  var index = store.getters.permission.indexOf(code)
-  return index > 0
-}
+
+//注册指令
+Vue.directive('auth', {
+  inserted: function (el, binding) {
+    //判断权限编码是否存在
+    var data = ['']//dic_addchild
+    // var index = store.getters.permission.indexOf(binding.value)
+    var index = data.indexOf(binding.value)
+    if (index < 0) {
+      //不存在隐藏
+      el.parentNode.removeChild(el)
+    }
+  }
+
+})

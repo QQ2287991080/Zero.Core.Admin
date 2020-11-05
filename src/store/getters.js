@@ -9,6 +9,7 @@ const getters = {
   menu: (state) => user.state.menu, //菜单
   menuUrls: (state) => user.state.menuUrls,
   isCollapse: (state) => app.state.isCollapse,
+  avatarMenuVisible: (state) => app.state.avatarMenuVisible,
   options: (state) => tag.state.options,
   activeIndex: (state) => tag.state.activeIndex,
 }
