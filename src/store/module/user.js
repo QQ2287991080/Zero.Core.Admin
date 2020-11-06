@@ -2,6 +2,8 @@ import { Login, LoginOut, GetUserInfo } from '@/api/user/index'
 import { setToken, getToken, removeToken } from '@/utils/auth'
 //初始化State
 const state = {
+  superAdmin: false,
+  role: '',
   token: '',
   realName: '', //真实名称
   userName: '', //用户名
@@ -12,6 +14,12 @@ const state = {
 }
 //mutations 事件
 const mutations = {
+  SET_SUPER_ADMIN(state, value) {
+    state.superAdmin = value
+  },
+  SET_ROLE(state, value) {
+    state.role = value
+  },
   //设置token
   SET_TOEKN: (state, token) => {
     state.token = token
@@ -72,6 +80,8 @@ const actions = {
         const { data } = res.data
         //console.log('now get userInfo ')
         //console.log(data)
+        commit('SET_SUPER_ADMIN', data.isSuperAdmin)
+        commit('SET_ROLE', data.role)
         //头像
         commit('SET_AVATAR', data.avatar)
         //真实姓名
@@ -79,10 +89,10 @@ const actions = {
         //用户名
         commit('SET_USERNAME', data.userName)
         //权限
-        commit('SET_PERMISSION', data.permission)
+        commit('SET_PERMISSION', data.permissionCode ?? [])
         //菜单
-        commit('SET_MENU', data.menu)
-        commit('SET_MENU_URLS', data.menuUrls)
+        commit('SET_MENU', data.menu ?? [])
+        commit('SET_MENU_URLS', data.menuUrls ?? [])
         resolve(data)
       })
     }).catch((err) => {
@@ -98,6 +108,8 @@ const actions = {
           if (res.data.data.statuCode === 200) {
             //token
             removeToken()
+            commit('SET_SUPER_ADMIN', false)
+            commit('SET_ROLE', '')
             //头像
             commit('SET_AVATAR', '')
             //真实姓名

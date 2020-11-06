@@ -12,7 +12,7 @@
     </div>
     <!-- 头像下拉菜单 -->
     <ul class="contextmenu" v-show="avatarMenuVisible">
-      <li href="javascript:;">个人中心</li>
+      <li href="javascript:;" @click="personCenter">个人中心</li>
       <li href="javascript:;">退出</li>
     </ul>
   </div>
@@ -20,8 +20,8 @@
 
 <script>
 import appMain from "@/views/layout/components/AppMain"; //页面布局的右侧区域
-import sidebar from "@/views/layout/components/sidebar"; //页面布局的左侧菜单
-// import sidebar from "../layout/components/mySidebar/index";
+// import sidebar from "@/views/layout/components/sidebar"; //页面布局的左侧菜单
+import sidebar from "../layout/components/mySidebar/index";
 import mainHeader from "../layout/components/header/mainHeader"; //头部
 import mainTags from "../layout/components/header/mainTags"; //标签
 import tags from "../layout/components/tags";
@@ -52,6 +52,11 @@ export default {
     ChangeCollapse: function name(params) {
       var collapse = store.getters.isCollapse;
       store.dispatch("collapse", !collapse);
+    },
+    //个人中心
+    personCenter() {
+      console.log("go center");
+      this.$router.push({ path: "/personCenter" });
     },
   },
 
@@ -86,10 +91,8 @@ export default {
 
     avatarMenuVisible() {
       if (this.avatarMenuVisible) {
-        console.log("--------------");
         window.addEventListener("click", (e) => {
           const target = e.target;
-          console.log(e);
           store.dispatch("avatarMenuVisible", false);
         });
       }

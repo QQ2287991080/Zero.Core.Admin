@@ -84,7 +84,7 @@ export const routes = [
         component: () => import('@/views/systemModule/diction'),
         meta: {
           title: '字典管理',
-          icon: "full-screen",
+          icon: 'full-screen',
           iconType: 'el',
         },
       },
@@ -114,7 +114,27 @@ export const routes = [
           icon: 'user',
           iconType: 'el',
         },
-      }
+      },
+    ],
+  },
+  {
+    path: '',
+    component: Layout,
+    meta: {
+      title: '个人中心',
+      icon: 'user',
+      iconType: 'el',
+    },
+    children: [
+      {
+        path: '/personCenter',
+        component: () => import('@/views/personCenter'),
+        meta: {
+          title: '个人中心',
+          icon: 'user',
+          iconType: 'el',
+        },
+      },
     ],
   },
   {

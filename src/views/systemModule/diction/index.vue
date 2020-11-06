@@ -43,6 +43,7 @@
                   placement="top-start"
                 >
                   <el-button
+                    v-auth="'dic_add'"
                     type="text"
                     size="mini"
                     icon="el-icon-add-location"
@@ -57,6 +58,7 @@
                   placement="top-start"
                 >
                   <el-button
+                    v-auth="'dic_update'"
                     type="text"
                     icon="el-icon-edit"
                     @click="() => updateTree(data)"
@@ -69,6 +71,7 @@
                   placement="top-start"
                 >
                   <el-button
+                    v-auth="'dic_delete'"
                     type="text"
                     size="mini"
                     icon="el-icon-delete"
@@ -189,11 +192,7 @@ export default {
         idParent: "", //父级id
         parentName: "", //父级名称
       },
-      data: [
-        {
-          name: "xxx",
-        },
-      ],
+      data: [],
       formLabelWidth: "80px",
       defaultProps: {
         children: "childrens",
@@ -220,6 +219,7 @@ export default {
       getTree()
         .then((res) => {
           this.data = res.data.data;
+          console.log(this.data);
         })
         .catch((err) => {
           console.log(err);

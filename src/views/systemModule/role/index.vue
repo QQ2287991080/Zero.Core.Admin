@@ -480,7 +480,6 @@ export default {
     isCheckedMenuFun(id) {
       var index = this.checkedMenu.indexOf(id);
       let ok = index >= 0 ? true : false;
-      console.log(ok);
       return ok;
     },
     /**
@@ -510,7 +509,6 @@ export default {
     checkChangeMenu(value) {
       let check = this.checkedMenu;
       let menuId = value.id;
-      console.log(check);
       const index = check.indexOf(menuId);
       if (index < 0) {
         this.checkedMenu.push(menuId);
@@ -529,7 +527,6 @@ export default {
         menus: this.checkedMenu,
         permissions: this.checkedPermission,
       };
-      console.log(data);
       if (data.roleId === 0) {
         console.log("roleid connot zero");
       } else {
@@ -537,7 +534,6 @@ export default {
         open();
         setPermission(data)
           .then((res) => {
-            console.log(res);
             if (res.data.errCode === 200) {
               this.$message({
                 type: "success",
