@@ -14,6 +14,9 @@ import store from './store'
 import './icons/index'
 import './setup/ThirdUI'
 import '@/styles/index.scss'
+
+import VueCropper from 'vue-cropper'
+Vue.use(VueCropper)
 //#endregion
 import test from './test'
 import './utils/roleAuth'

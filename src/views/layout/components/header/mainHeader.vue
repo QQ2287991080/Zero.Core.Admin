@@ -6,10 +6,7 @@
     </div>
     <div class="box"></div>
     <div class="avater" @mouseenter="showMenu()">
-      <el-avatar
-        v-if="avater"
-        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-      ></el-avatar>
+      <el-avatar fit="fill" v-if="showAvatar()" :src="avatar"></el-avatar>
       <el-avatar v-else>{{ userName }}</el-avatar>
     </div>
     <ul class="contextmenu" v-show="contextMenuVisible">
@@ -26,25 +23,30 @@ export default {
   props: [],
   data() {
     return {
-      avater: false,
-      userName: "",
       menuImg: require("../../../../assets/menu.png"),
       contextMenuVisible: false, //菜单展示
     };
   },
-  created() {
-    if (store.getters.avater) {
-      this.avater = true;
-    } else {
-      this.userName = !store.getters.userName ? "Zero" : store.getters.userName;
-    }
-  },
+  created() {},
   computed: {
     isCollapse() {
       return store.getters.isCollapse;
     },
+    avatar() {
+      console.log(store.getters.avatar);
+      return store.getters.avatar;
+    },
+    userName() {
+      return store.getters.userName;
+    },
   },
   methods: {
+    showAvatar() {
+      if (this.avatar === "" || this.avatar === null) {
+        return false;
+      }
+      return true;
+    },
     //改变菜单伸缩
     ChangeCollapse: function name(params) {
       var collapse = store.getters.isCollapse;
@@ -93,7 +95,7 @@ export default {
   font-size: 30px;
 }
 .avater {
-  position: absolute;
+  position: fixed;
   cursor: pointer;
   right: 50px;
   width: 50px;

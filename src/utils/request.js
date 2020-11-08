@@ -29,7 +29,8 @@ instance.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`
     }
     if (process.env.VUE_APP_TEST) {
-      config.headers.Authorization = `Bearer ${process.env.VUE_APP_TOKEN}`
+      // config.headers.Authorization = `Bearer ${process.env.VUE_APP_TOKEN}`
+      config.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiWmVybyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2F1dGhlbnRpY2F0aW9uIjoiWmVyby5Db2RlIiwibmJmIjoxNjA0NzYzNzA5LCJleHAiOjE2MDQ3NjQ4MDAsImlzcyI6Ilplcm8uQ29yZSIsImF1ZCI6IkV2ZXJ5b25lIn0.Xo0UUbAPBaibCcBLEx-VVQUucMUG2QU6o-i3sVu_BjI`
     }
     return config
   },

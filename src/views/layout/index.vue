@@ -56,11 +56,32 @@ export default {
     //个人中心
     personCenter() {
       console.log("go center");
+      //单个对象
+      let path = "/personCenter";
+      let title = "个人中心";
+      let option = { path: path, name: title };
+      //store中是否存在
+      var flag = true;
+      //循环判断路由是否存在，存在的话更改activeIndex，跳转到对应页面
+      this.options.forEach((element) => {
+        //如果path 存在
+        if (element.path === path) {
+          flag = false;
+        }
+      });
+      if (flag) {
+        //添加
+        store.dispatch("addTab", option);
+      }
       this.$router.push({ path: "/personCenter" });
     },
   },
 
   computed: {
+    //tabs
+    options() {
+      return store.getters.options;
+    },
     classObj() {
       return {
         hideSidebar: store.getters.isCollapse,

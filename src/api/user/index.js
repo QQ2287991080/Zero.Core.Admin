@@ -41,6 +41,16 @@ export function GetAllMenu() {
     method: 'get',
   })
 }
+
+/**
+ * 获取当前用户的具体信息
+ */
+export function UserDetails() {
+  return request({
+    url: 'api/user/UserDetails',
+    method: 'get',
+  })
+}
 //#endregion
 
 //#region  user module
@@ -165,6 +175,34 @@ export function getUserRole(userId) {
     url: '/api/user/getUserRole',
     method: 'get',
     params: data,
+  })
+}
+//#endregion
+
+//#region Center
+/**
+ * 重置密码
+ * @param {*} password
+ * @param {*} passwordCfm
+ */
+export function resetPassword(password, passwordCfm) {
+  let data = { password, passwordCfm }
+  return request({
+    url: '/api/user/resetPassword',
+    method: 'get',
+    params: data,
+  })
+}
+/**
+ * 上传头像
+ * @param {*} data
+ */
+export function upLoadAvatar(data) {
+  return request({
+    url: '/api/user/uploadAvatar',
+    method: 'post',
+    headers: { 'content-type': 'multipart/form-data' },
+    data: data,
   })
 }
 //#endregion
