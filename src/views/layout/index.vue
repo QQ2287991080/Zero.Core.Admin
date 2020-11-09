@@ -13,14 +13,14 @@
     <!-- 头像下拉菜单 -->
     <ul class="contextmenu" v-show="avatarMenuVisible">
       <li href="javascript:;" @click="personCenter">个人中心</li>
-      <li href="javascript:;">退出</li>
+      <li href="javascript:;" @click="loginOut">退出</li>
     </ul>
   </div>
 </template>
 
 <script>
 import appMain from "@/views/layout/components/AppMain"; //页面布局的右侧区域
-// import sidebar from "@/views/layout/components/sidebar"; //页面布局的左侧菜单
+//import sidebar from "@/views/layout/components/sidebar"; //页面布局的左侧菜单
 import sidebar from "../layout/components/mySidebar/index";
 import mainHeader from "../layout/components/header/mainHeader"; //头部
 import mainTags from "../layout/components/header/mainTags"; //标签
@@ -74,6 +74,18 @@ export default {
         store.dispatch("addTab", option);
       }
       this.$router.push({ path: "/personCenter" });
+    },
+    //退出登录
+    loginOut() {
+      store.dispatch("loginOut").then((res) => {
+        this.$router.push({ path: "/login" });
+        setTimeout(() => {
+          this.$message({
+            message: "操作成功",
+            type: "success",
+          });
+        }, 500);
+      });
     },
   },
 

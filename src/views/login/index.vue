@@ -1,25 +1,35 @@
 
 <template>
   <div class="login-container">
-    <el-form
-      :model="loginForm"
-      :rules="rules"
-      ref="loginForm"
-      label-width="100px"
-      class="login-form"
-    >
-      <!-- @keyup.native="clearTrim('userName')"  禁用空格键-->
-      <el-form-item label="用户名" prop="userName">
-        <el-input v-model="loginForm.userName"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model="loginForm.password"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm('loginForm')">提交</el-button>
-        <el-button @click="resetForm('loginForm')">重置</el-button>
-      </el-form-item>
-    </el-form>
+    <div class="login-form">
+      <el-form
+        :model="loginForm"
+        :rules="rules"
+        ref="loginForm"
+        label-width="100px"
+      >
+        <!-- @keyup.native="clearTrim('userName')"  禁用空格键-->
+        <el-form-item label="用户名" prop="userName">
+          <el-input v-model="loginForm.userName"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" v-model="loginForm.password"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            class="login-button"
+            type="primary"
+            @click="submitForm('loginForm')"
+            >登录</el-button
+          >
+          <!-- <el-button @click="resetForm('loginForm')">重置</el-button> -->
+        </el-form-item>
+      </el-form>
+      <div style="text-align: center">
+        <p>管理员：admin 密码：123456</p>
+        <p>游 客：test001 密码：123456</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -48,7 +58,7 @@ export default {
     return {
       loginForm: {
         password: "123456",
-        userName: "admin",
+        userName: "Zero",
       },
       redirect: undefined,
       otherQuery: {},
@@ -80,32 +90,17 @@ export default {
       this.$refs[formName].validate((valid) => {
         //验证表达是否通过
         if (valid) {
-          // this.$loading({
-          //   lock: true,
-          //   text: "Loading",
-          //   spinner: "el-icon-loading",
-          //   background: "rgba(0, 0, 0, 0.7)",
-          // });
-
           open();
-          console.log(this.loginForm);
           var result = this.$store
             .dispatch("login", this.loginForm)
             .then((res) => {
-              console.log(res);
-              if (res.data.statusCode === 200) {
-                this.$router.push("/");
+              if (res.data.errCode === 200) {
+                this.$router.push({ path: "/dashboard" });
               }
             });
           setTimeout(() => {
-            console.log("hidden loading");
             close();
           }, 2000);
-          // this.$router.push({
-          //   path: this.redirect || "/",
-          //   query: this.otherQuery,
-          // });
-          //this.$router.push("/");
         } else {
           return false;
         }
@@ -146,20 +141,36 @@ export default {
 
 <style lang="scss" scoped>
 .login-container {
-  min-height: 100vh; //vh vm视窗大小，根据浏览器窗口大小计算位置
+  height: 100%; //vh vm视窗大小，根据浏览器窗口大小计算位置
   width: 100%;
   overflow: hidden;
-  background-image: url("../../assets/login-bgp.jpg");
-  background-size: cover; //图片自适应
-  background-color: transparent; //如果图片没加载出来就默认背景颜色
-  position: relative;
+  // background-image: url("../../assets/login-bgp.jpg");
+  //background-size: cover; //图片自适应
+  //background-color: transparent; //如果图片没加载出来就默认背景颜色
+  // position: relative;
+  // background-color: red;
   .login-form {
+    // background-color: white;
     position: relative; //相对定位
-    width: 520px;
-    max-width: 100%;
-    padding: 160px 35px 0;
+    border: 1px solid gray;
+    width: 380px;
+    height: 300px;
+    // top: 25%;
+    // left: 35%;
+    //padding: 160px 35px 0;
     margin: 0 auto;
+    box-shadow: 0px 0px 10px Violet;
     overflow: hidden;
+    margin-top: 180px;
+    .el-input {
+      width: 200px;
+    }
+    .el-form {
+      margin-top: 60px;
+    }
   }
+}
+.login-button {
+  width: 200px;
 }
 </style>

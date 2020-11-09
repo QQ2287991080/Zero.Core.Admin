@@ -1,5 +1,7 @@
 import { Login, LoginOut, GetUserInfo } from '@/api/user/index'
 import { setToken, getToken, removeToken } from '@/utils/auth'
+import store from '..'
+import data from '../../views/svg-icons/generateIconsView'
 //初始化State
 const state = {
   superAdmin: false,
@@ -105,7 +107,8 @@ const actions = {
       //调用退出登录接口
       LoginOut()
         .then((res) => {
-          if (res.data.data.statuCode === 200) {
+          console.log(res)
+          if (res.data.errCode === 200) {
             //token
             removeToken()
             commit('SET_SUPER_ADMIN', false)
@@ -122,7 +125,8 @@ const actions = {
             commit('SET_MENU', [])
             commit('SET_MENU_URLS', [])
           }
-          resolve()
+          store.dispatch('close_all_tab')
+          resolve(res)
         })
         .catch((err) => {
           reject(err)

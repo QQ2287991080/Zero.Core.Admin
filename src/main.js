@@ -4,7 +4,7 @@ import App from './App.vue'
 import router from './router'
 import route from 'vue-router'
 import store from './store'
-//import './utils/permission'
+import './utils/permission'
 //import './utils/global'
 //#endregion
 
@@ -18,7 +18,7 @@ import '@/styles/index.scss'
 import VueCropper from 'vue-cropper'
 Vue.use(VueCropper)
 //#endregion
-import test from './test'
+//import test from './test'
 import './utils/roleAuth'
 //#region  解决 Avoided redundant navigation to current location 错误
 Vue.config.productionTip = false

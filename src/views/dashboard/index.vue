@@ -1,14 +1,17 @@
 <template>
   <div class="app-container">
-    我是主页
-    <!-- <i class="el-icon-bug" /> -->
-    <i class="el-icon-right" />
-    <span>
-      <i class="el-icon-bug" />
-    </span>
-    <svg-icon class-name="disabled" icon-class="bug" />
-    <svg-icon icon-class="bug" />
-    <svg-icon icon-class="clipboard" />
+    <h1>欢迎来到Zero.Core.Admin</h1>
+    <p>
+      后端开源地址：<a href="https://github.com/QQ2287991080/Zero.Core">前往</a>
+    </p>
+    <p>
+      前端开源地址：<a href="https://github.com/QQ2287991080/Zero.Core.Admin"
+        >前往</a
+      >
+    </p>
+    <p>学习交流群</p>
+    <p>前端：954591544</p>
+    <p>后端：925362372</p>
   </div>
 </template>
 
@@ -25,3 +28,10 @@ export default {
   methods: {},
 };
 </script>
+<style lang="scss" scoped>
+a {
+  color: blue;
+  text-decoration: none;
+  border-bottom: 1px solid blue;
+}
+</style>

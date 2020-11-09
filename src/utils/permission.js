@@ -13,7 +13,6 @@ router.beforeEach(async (to, from, next) => {
   // const isExists = hasToken ? '是' : '否'
   // console.log('token 是否有值===' + isExists)
   if (hasToken) {
-    console.log(to.path)
     if (to.path === '/login') {
       next('/')
     } else {

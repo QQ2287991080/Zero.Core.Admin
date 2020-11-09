@@ -15,15 +15,16 @@
     </el-menu>
   </el-scrollbar>-->
   <el-menu
-    mode="vertical"
     :show-timeout="200"
-    :default-active="path"
     :collapse="isCollapse"
+    :collapse-transition="true"
     background-color="#304156"
-    text-color="#bfcbd9"
+    text-color="#BFCBD9"
     active-text-color="#409EFF"
+    :default-active="path"
     :unique-opened="true"
     router
+    mode="vertical"
   >
     <sidebar-item :menus="menu"></sidebar-item>
   </el-menu>
@@ -46,7 +47,7 @@ export default {
     // ...mapGetters(["menu"]),
     isCollapse() {
       // return !this.sidebar.opened;
-      return false;
+      return store.getters.isCollapse;
     },
     menu() {
       return store.getters.menu;

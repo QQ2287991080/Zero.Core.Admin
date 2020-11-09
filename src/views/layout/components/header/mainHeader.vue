@@ -33,7 +33,6 @@ export default {
       return store.getters.isCollapse;
     },
     avatar() {
-      console.log(store.getters.avatar);
       return store.getters.avatar;
     },
     userName() {
@@ -53,7 +52,6 @@ export default {
       store.dispatch("collapse", !collapse);
     },
     showMenu() {
-      console.log("show");
       // this.contextMenuVisible = true;
       store.dispatch("avatarMenuVisible", true);
     },
@@ -95,7 +93,7 @@ export default {
   font-size: 30px;
 }
 .avater {
-  position: fixed;
+  position: absolute;
   cursor: pointer;
   right: 50px;
   width: 50px;
