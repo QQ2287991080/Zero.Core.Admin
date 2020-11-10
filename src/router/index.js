@@ -7,7 +7,7 @@ export const routes = [
   {
     path: '/',
     component: Layout,
-    //redirect: '/dashboard',
+    redirect: '/dashboard',
     children: [
       {
         path: 'dashboard',

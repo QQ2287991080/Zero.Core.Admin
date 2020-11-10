@@ -32,6 +32,7 @@
                 >
                   <el-button
                     type="text"
+                    v-auth="'menu_addchildren'"
                     icon="el-icon-bottom"
                     @click="() => appendChildren(data)"
                   ></el-button>
@@ -43,6 +44,7 @@
                   placement="top-start"
                 >
                   <el-button
+                    v-auth="'menu_addlevel'"
                     type="text"
                     size="mini"
                     icon="el-icon-add-location"
@@ -57,6 +59,7 @@
                   placement="top-start"
                 >
                   <el-button
+                    v-auth="'menu_update'"
                     type="text"
                     icon="el-icon-edit"
                     @click="() => updateTree(data)"
@@ -69,6 +72,7 @@
                   placement="top-start"
                 >
                   <el-button
+                    v-auth="'menu_delete'"
                     type="text"
                     size="mini"
                     icon="el-icon-delete"
@@ -85,7 +89,12 @@
     <!-- 右边权限部分 -->
     <div class="menu-right">
       <el-row>
-        <el-button type="primary" size="mini" @click="addPermission">
+        <el-button
+          v-auth="'menu_addpermission'"
+          type="primary"
+          size="mini"
+          @click="addPermission"
+        >
           新增
         </el-button>
       </el-row>
@@ -103,6 +112,7 @@
         >
           <template slot-scope="{ row, $index }">
             <el-button
+              v-auth="'menu_updatepermission'"
               type="primary"
               size="mini"
               @click="updatePermission(row, $index)"
@@ -111,6 +121,7 @@
             <el-button
               type="danger"
               size="mini"
+              v-auth="'menu_deletepermission'"
               @click="deletePermission(row, $index)"
               >删除</el-button
             >

@@ -25,7 +25,7 @@ var instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     var token = getToken()
-    if (token !== null) {
+    if (token !== null && token !== undefined && token !== '') {
       config.headers.Authorization = `Bearer ${token}`
     }
     // if (process.env.VUE_APP_TEST) {

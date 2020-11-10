@@ -4,7 +4,7 @@ import store from '../store'
 //注册指令
 Vue.directive('auth', {
   inserted: function(el, binding) {
-    if (!store.getters.isSuperAdmin) {
+    if (!store.getters.superAdmin) {
       //判断权限编码是否存在
       var data = [''] //dic_addchild
       var index = store.getters.permission.indexOf(binding.value)

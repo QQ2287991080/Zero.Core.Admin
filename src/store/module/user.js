@@ -107,25 +107,9 @@ const actions = {
       //调用退出登录接口
       LoginOut()
         .then((res) => {
-          console.log(res)
           if (res.data.errCode === 200) {
-            //token
-            removeToken()
-            commit('SET_SUPER_ADMIN', false)
-            commit('SET_ROLE', '')
-            //头像
-            commit('SET_AVATAR', '')
-            //真实姓名
-            commit('SET_REALNAME', '')
-            //用户名
-            commit('SET_USERNAME', '')
-            //权限
-            commit('SET_PERMISSION', [])
-            //菜单
-            commit('SET_MENU', [])
-            commit('SET_MENU_URLS', [])
+            store.dispatch('tokenTimeOut')
           }
-          store.dispatch('close_all_tab')
           resolve(res)
         })
         .catch((err) => {
@@ -139,6 +123,25 @@ const actions = {
       console.log(res.data.data)
       commit('SET_MENU'), res.data.data
     })
+  },
+  //token时间结束
+  tokenTimeOut({ commit }) {
+    //token
+    removeToken()
+    commit('SET_SUPER_ADMIN', false)
+    commit('SET_ROLE', '')
+    //头像
+    commit('SET_AVATAR', '')
+    //真实姓名
+    commit('SET_REALNAME', '')
+    //用户名
+    commit('SET_USERNAME', '')
+    //权限
+    commit('SET_PERMISSION', [])
+    //菜单
+    commit('SET_MENU', [])
+    commit('SET_MENU_URLS', [])
+    store.dispatch('close_all_tab')
   },
 }
 export default {

@@ -31,6 +31,8 @@ router.beforeEach(async (to, from, next) => {
     /* has no token*/
     // console.log('has no token')
     // console.log('to path===' + to.path)
+    //如果没有token就清除该用户相关信息
+    store.dispatch('tokenTimeOut')
     //如果to的页面不是登录页，就跳转到登录页
     if (to.path !== '/login') {
       //console.log('has no token redirect to login page!')

@@ -13,7 +13,11 @@
           <el-input v-model="loginForm.userName"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input type="password" v-model="loginForm.password"></el-input>
+          <el-input
+            type="password"
+            @keyup.enter.native="submitForm('loginForm')"
+            v-model="loginForm.password"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <el-button
@@ -58,7 +62,7 @@ export default {
     return {
       loginForm: {
         password: "123456",
-        userName: "Zero",
+        userName: "admin",
       },
       redirect: undefined,
       otherQuery: {},

@@ -24,6 +24,7 @@
           style="margin-left: 10px"
           type="primary"
           icon="el-icon-edit"
+          v-auth="'role_add'"
           @click="handleCreate"
         >
           新增
@@ -76,19 +77,26 @@
             size="mini"
             icon="el-icon-share"
             @click="handlePermission(row)"
+            v-auth="'role_permission'"
           >
             分配权限
           </el-button>
           <el-button type="success" size="mini" @click="handleInfo(row)">
             查看
           </el-button>
-          <el-button type="warning" size="mini" @click="handleUpdate(row)">
+          <el-button
+            type="warning"
+            v-auth="'role_update'"
+            size="mini"
+            @click="handleUpdate(row)"
+          >
             修改
           </el-button>
           <el-button
             v-if="row.status != 'deleted'"
             size="mini"
             type="danger"
+            v-auth="'role_delete'"
             @click="handleDelete(row, $index)"
           >
             删除
@@ -270,14 +278,7 @@ export default {
     //加载列表
     this.getList();
   },
-  watch: {
-    // checkedMenu() {
-    //   return this.checkedMenu;
-    // },
-    // checkedPermission() {
-    //   return this.checkedPermission;
-    // },
-  },
+  watch: {},
   methods: {
     //获取列表数据
     getList() {
@@ -436,6 +437,7 @@ export default {
      * 分配权限 获取能分配的菜单和权限
      */
     handlePermission(row, index) {
+      open();
       this.getRoleExistsPermissionData(row.id);
       //请求接口
       getMenuPermission()
@@ -452,13 +454,15 @@ export default {
 
       this.roleId = row.id;
 
-      this.dialogPermission = true;
+      setTimeout(() => {
+        this.dialogPermission = true;
+        close();
+      }, 2000);
     },
     /**
      * 获取角色已经存在的角色权限
      */
     getRoleExistsPermissionData(id) {
-      open();
       //调用接口
       getRoleExistsPermission(id)
         .then((res) => {
@@ -466,12 +470,10 @@ export default {
           this.$nextTick(() => {
             this.checkedMenu = res.data.data.menuIds ?? [];
             this.checkedPermission = res.data.data.permissions ?? [];
-            close();
           });
         })
         .catch((err) => {
           console.log(err);
-          close();
         });
     },
     /**
@@ -497,11 +499,17 @@ export default {
       let check = this.checkedPermission;
       let permissionId = value.id;
       const index = check.indexOf(permissionId);
+      console.log("======");
+      console.log(value);
+      console.log(check);
       if (index < 0) {
+        console.log("add");
         this.checkedPermission.push(permissionId);
       } else {
+        console.log("remove");
         this.checkedPermission.splice(index);
       }
+      console.log("======");
     },
     /**
      * 点击菜单change事件
@@ -527,6 +535,7 @@ export default {
         menus: this.checkedMenu,
         permissions: this.checkedPermission,
       };
+      console.log(data);
       if (data.roleId === 0) {
         console.log("roleid connot zero");
       } else {

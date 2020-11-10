@@ -25,6 +25,7 @@
           type="primary"
           icon="el-icon-edit"
           @click="handleCreate"
+          v-auth="'user_add'"
         >
           新增
         </el-button>
@@ -111,6 +112,7 @@
             size="mini"
             icon="el-icon-share"
             @click="handleRole(row)"
+            v-auth="'user_setrole'"
           >
             分配角色
           </el-button>
@@ -119,6 +121,7 @@
             type="primary"
             size="mini"
             icon="el-icon-unlock"
+            v-auth="'user_lock'"
             @click="handleChangeLock(row, false)"
           >
             解锁
@@ -128,6 +131,7 @@
             type="danger"
             size="mini"
             icon="el-icon-lock"
+            v-auth="'user_lock'"
             @click="handleChangeLock(row, true)"
           >
             锁定
@@ -135,12 +139,18 @@
           <el-button type="success" size="mini" @click="handleInfo(row)">
             查看
           </el-button>
-          <el-button type="warning" size="mini" @click="handleUpdate(row)">
+          <el-button
+            v-auth="'user_update'"
+            type="warning"
+            size="mini"
+            @click="handleUpdate(row)"
+          >
             修改
           </el-button>
           <el-button
             v-if="row.status != 'deleted'"
             size="mini"
+            v-auth="'user_delete'"
             type="danger"
             @click="handleDelete(row, $index)"
           >

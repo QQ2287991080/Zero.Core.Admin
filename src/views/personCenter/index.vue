@@ -6,11 +6,13 @@
         <el-row>
           <div class="row-style">
             <label> 头像：</label>
-            <el-avatar
-              v-if="showAvatar(info.avatar)"
-              size="large"
-              :src="info.avatar"
-            ></el-avatar>
+            <el-avatar v-if="showAvatar(info.avatar)" size="large">
+              <!-- :src="info.avatar" -->
+              <el-image
+                :src="info.avatar"
+                :preview-src-list="[info.avatar]"
+              ></el-image>
+            </el-avatar>
             <el-avatar size="large" v-else>{{ info.userName }}</el-avatar>
             <!-- element 上传图片按钮 -->
             <el-upload
@@ -48,7 +50,7 @@
         </el-row>
         <el-row>
           <label> 性别： </label>
-          <span>{{ info.email }}</span>
+          <span>{{ info.sex === 1 ? "男" : "女" }}</span>
           <i class="el-icon-edit-outline" />
         </el-row>
         <el-row>
