@@ -1,28 +1,32 @@
 <template>
   <div class="template-tabs">
-    <el-tabs
-      v-model="activeIndex"
-      type="card"
-      closable
-      @tab-click="tabClick"
-      v-if="options.length"
-      @tab-remove="tabRemove"
-      @contextmenu.native.prevent="handleClickContextMenu($event)"
-    >
-      <el-tab-pane
-        :key="index"
-        v-for="(item, index) in options"
-        :label="item.name"
-        :name="item.path"
+    <router-link :to="activeIndex">
+      <el-tabs
+        v-model="activeIndex"
+        type="card"
+        closable
+        @tab-click="tabClick"
+        v-if="options.length"
+        @tab-remove="tabRemove"
+        @contextmenu.native.prevent="handleClickContextMenu($event)"
       >
-      </el-tab-pane>
-    </el-tabs>
+        <el-tab-pane
+          :key="index"
+          v-for="(item, index) in options"
+          :label="item.name"
+          :name="item.path"
+        >
+        </el-tab-pane>
+      </el-tabs>
+    </router-link>
     <ul
       class="contextmenu"
       :style="{ left: menuLeft, top: menuTop }"
       v-show="contextMenuVisible"
     >
-      <li href="javascript:;" @click="refresh">刷新</li>
+      <li href="javascript:;" @click="refresh" v-if="activeIndex === tagIndex">
+        刷新
+      </li>
       <li href="javascript:;" @click="close">关闭</li>
       <li href="javascript:;" @click="closeOther">关闭其它</li>
       <li href="javascript:;" @click="closeAll">关闭所有</li>
@@ -32,6 +36,7 @@
 
 <script>
 import store from "@/store";
+import { open, close } from "@/utils/loading";
 export default {
   name: "tags",
   data() {
@@ -62,7 +67,7 @@ export default {
     // tab切换时，动态的切换路由
     tabClick(tab) {
       let path = this.activeIndex;
-      this.$router.push({ path: path });
+      //this.$router.push({ path: path, replace: true });
     },
     //删除tab
     tabRemove(targetName) {
@@ -88,8 +93,12 @@ export default {
     //右键菜单
     //刷新
     refresh() {
-      // location.reload();
-      // this.$router.push({ path: this.tagIndex });
+      // console.log(this.tagIndex);
+      // console.log(this.$route);
+      open();
+      this.$router.push({ path: this.tagIndex });
+      // this.$router.go(0);
+      close();
     },
     //关闭
     close() {

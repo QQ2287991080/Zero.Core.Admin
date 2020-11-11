@@ -158,7 +158,6 @@ export default {
         var idParent = this.form.idParent;
         //调取接口
         var validateData = { name: value, id, idParent };
-        console.log(validateData);
         isContains(validateData).then((res) => {
           let any = res.data.data;
           if (any) {
@@ -219,7 +218,6 @@ export default {
       getTree()
         .then((res) => {
           this.data = res.data.data;
-          console.log(this.data);
         })
         .catch((err) => {
           console.log(err);

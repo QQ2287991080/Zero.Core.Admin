@@ -1,7 +1,10 @@
 <template>
   <section class="app-main">
     <transition name="fade-transform" mode="out-in">
-      <router-view></router-view>
+      <keep-alive>
+        <router-view :key="key" v-if="$route.meta.keepAlive"></router-view>
+      </keep-alive>
+      <router-view :key="key" v-if="!$route.meta.keepAlive"></router-view>
     </transition>
   </section>
 </template>
@@ -10,9 +13,10 @@
 export default {
   name: "AppMain",
   computed: {
-    // key() {
-    //   return this.$route.name !== undefined ? this.$route.name + +new Date() : this.$route + +new Date()
-    // }
+    key() {
+      var key = this.$route.path !== undefined ? this.$route.path : "";
+      return key;
+    },
   },
 };
 </script>
