@@ -1,6 +1,5 @@
 import router from '../router'
 import store from '../store'
-import { routes } from '../router'
 import { getToken } from './auth'
 //import Layout from '@/views/layout'
 
@@ -16,17 +15,17 @@ router.beforeEach(async (to, from, next) => {
     if (to.path === '/login') {
       next('/')
     } else {
-      //console.log('next')
       if (!store.getters.userName) {
-        //console.log('获取用户信息')
         store.dispatch('getUserInfo').then((res) => {
-          //console.log(res)
+          let index = store.getters.menuUrls.indexOf(to.path)
+          if (index < 0) {
+            window.location = '#/401'
+            return
+          }
         })
       }
-      //router.addRoutes(routes)
       next()
     }
-    // console.log('next end')
   } else {
     /* has no token*/
     // console.log('has no token')
@@ -42,16 +41,6 @@ router.beforeEach(async (to, from, next) => {
       //console.log('redirect login  page')
       next()
     }
-    //next()
-    //   console.log(to.path)
-    //   // other pages that do not have permission to access are redirected to the login page.
-    //   //next(`/login?redirect=${to.path}`)
-    //   // if (to.path === '/login') {
-    //   //   next()
-    //   // } else {
-    //   //   next('/login')
-    //   // }
-    // }
   }
 })
 

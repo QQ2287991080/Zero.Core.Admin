@@ -1,5 +1,6 @@
 <template>
   <div class="template-tabs">
+    <!-- scroll-pane -->
     <router-link :to="activeIndex">
       <el-tabs
         v-model="activeIndex"
@@ -93,12 +94,15 @@ export default {
     //右键菜单
     //刷新
     refresh() {
-      // console.log(this.tagIndex);
+      console.log(this.tagIndex);
       // console.log(this.$route);
-      open();
-      this.$router.push({ path: this.tagIndex });
-      // this.$router.go(0);
-      close();
+      // this.$store.dispatch("deleteTab", this.tagIndex);
+      // const { fullPath } = this.tagIndex;
+      // this.$nextTick(() => {
+      //   this.$router.replace({
+      //     path: fullPath,
+      //   });
+      // });
     },
     //关闭
     close() {
@@ -152,14 +156,6 @@ export default {
     },
     activeIndex: {
       get() {
-        // return store.getters.activeIndex;
-        // if (
-        //   this.options.indexOf((f) => f.path == store.getters.activeIndex) < 0
-        // ) {
-        //   return store.getters.activeIndex;
-        // } else {
-        //   this.$router.push({ path: "/dashboard" });
-        // }
         return store.getters.activeIndex;
       },
       set(val) {
@@ -175,35 +171,7 @@ export default {
         const target = e.target;
         this.contextMenuVisible = false;
       });
-      // if (this.contextMenuVisible) {
-      //   document.body.addEventListener(
-      //     "click",
-      //     () => (this.contextMenuVisible = false)
-      //   );
-      // } else {
-      //   document.body.removeEventListener(
-      //     "click",
-      //     () => (this.contextMenuVisible = false)
-      //   );
-      // }
     },
-    // $route(to) {
-    //   let flag = false;
-    //   for (let option of this.options) {
-    //     if (option.name === to.name) {
-    //       flag = true;
-    //       this.$store.commit("set_active_index", "/" + to.path.split("/")[1]);
-    //       break;
-    //     }
-    //   }
-    //   if (!flag) {
-    //     this.$store.commit("add_tabs", {
-    //       route: "/" + to.path.split("/")[1],
-    //       name: to.name,
-    //     });
-    //     this.$store.commit("set_active_index", "/" + to.path.split("/")[1]);
-    //   }
-    // },
   },
 };
 </script>

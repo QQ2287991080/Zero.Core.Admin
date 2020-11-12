@@ -2,9 +2,9 @@
   <section class="app-main">
     <transition name="fade-transform" mode="out-in">
       <keep-alive>
-        <router-view :key="key" v-if="$route.meta.keepAlive"></router-view>
+        <router-view v-if="keepAlive"></router-view>
       </keep-alive>
-      <router-view :key="key" v-if="!$route.meta.keepAlive"></router-view>
+      <router-view v-if="!keepAlive"></router-view>
     </transition>
   </section>
 </template>
@@ -13,6 +13,14 @@
 export default {
   name: "AppMain",
   computed: {
+    keepAlive() {
+      // console.log(this.$route);
+      // if (this.$route.name === "empty") {
+      //   console.log(this.$route.params.redirect);
+      //   this.$router.push({ paht: this.$route.params.redirect });
+      // }
+      return this.$route.meta.keepAlive;
+    },
     key() {
       var key = this.$route.path !== undefined ? this.$route.path : "";
       return key;

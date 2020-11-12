@@ -17,7 +17,7 @@ export const routes = [
           title: '首页',
           icon: 'dashboard',
           iconType: 'svg',
-          keepAlive: true
+          keepAlive: true,
         },
       },
     ],
@@ -38,7 +38,7 @@ export const routes = [
           title: '技术总览',
           icon: 'document',
           iconType: 'el',
-          keepAlive: true
+          keepAlive: true,
         },
       },
       {
@@ -48,7 +48,7 @@ export const routes = [
           title: '日志推送',
           icon: 'news',
           iconType: 'el',
-          keepAlive: true
+          keepAlive: true,
         },
       },
     ],
@@ -69,7 +69,7 @@ export const routes = [
           title: '图标管理',
           icon: 'icon',
           iconType: 'svg',
-          keepAlive: true
+          keepAlive: true,
         },
       },
     ],
@@ -90,7 +90,7 @@ export const routes = [
           title: '字典管理',
           icon: 'full-screen',
           iconType: 'el',
-          keepAlive: true
+          keepAlive: true,
         },
       },
       {
@@ -100,7 +100,7 @@ export const routes = [
           title: '角色管理',
           icon: 'role',
           iconType: 'svg',
-          keepAlive: true
+          keepAlive: true,
         },
       },
       {
@@ -110,7 +110,7 @@ export const routes = [
           title: '菜单管理',
           icon: 'menu',
           iconType: 'el',
-          keepAlive: true
+          keepAlive: true,
         },
       },
       {
@@ -120,7 +120,7 @@ export const routes = [
           title: '用户管理',
           icon: 'user',
           iconType: 'el',
-          keepAlive: true
+          keepAlive: true,
         },
       },
     ],
@@ -141,7 +141,30 @@ export const routes = [
           title: '个人中心',
           icon: 'user',
           iconType: 'el',
-          keepAlive: true
+          keepAlive: true,
+        },
+      },
+    ],
+  },
+  {
+    component: Layout,
+    path: '/empty',
+    name: 'empty',
+    meta: {
+      title: '空白',
+      icon: 'user',
+      iconType: 'el',
+      keepAlive: false,
+    },
+    children: [
+      {
+        path: '/empty',
+        component: () => import('@/views/empty'),
+        meta: {
+          title: '空白',
+          icon: 'user',
+          iconType: 'el',
+          keepAlive: false,
         },
       },
     ],
