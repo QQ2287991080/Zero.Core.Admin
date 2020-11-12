@@ -6,7 +6,8 @@
     <div :class="{ hasTagsView: needTagsView }" class="main-container">
       <div class="fixed-header">
         <main-header />
-        <tags />
+        <!-- <tags /> -->
+        <tags-view />
       </div>
       <app-main />
     </div>
@@ -25,7 +26,7 @@ import sidebar from "../layout/components/mySidebar/index"; //动态菜单
 import mainHeader from "../layout/components/header/mainHeader"; //头部
 import mainTags from "../layout/components/header/mainTags"; //标签
 import tags from "../layout/components/tags";
-
+import TagsView from "../layout/components/TagsView";
 import store from "@/store/index";
 import { close } from "../../utils/loading";
 export default {
@@ -36,6 +37,7 @@ export default {
     mainHeader,
     mainTags,
     tags,
+    TagsView,
   },
   data() {
     return {

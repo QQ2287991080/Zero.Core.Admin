@@ -119,13 +119,13 @@ export default {
     //监听路由变化，更新tab的activeIndex
     $route: {
       handler: function (route) {
-        console.log(store.getters.menuUrls);
-        let index = store.getters.menuUrls.indexOf(route.path);
-        var white = ["/dashboard", "/"];
-        if (index < 0 && white.indexOf(route.path) < 0) {
-          console.log(index);
-          this.$router.push({ path: "/401", replace: true });
-        }
+        // console.log(store.getters.menuUrls);
+        // let index = store.getters.menuUrls.indexOf(route.path);
+        // var white = ["/dashboard", "/"];
+        // if (index < 0 && white.indexOf(route.path) < 0) {
+        //   console.log(index);
+        //   this.$router.push({ path: "/401", replace: true });
+        // }
         //console.log(route.path);
         store.dispatch("setActiveIndex", route.path);
       },

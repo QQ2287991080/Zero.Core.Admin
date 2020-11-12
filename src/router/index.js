@@ -5,7 +5,7 @@ Vue.use(VueRouter)
 
 export const routes = [
   {
-    path: '/',
+    path: '',
     component: Layout,
     redirect: '/dashboard',
     children: [
@@ -18,9 +18,21 @@ export const routes = [
           icon: 'dashboard',
           iconType: 'svg',
           keepAlive: true,
+          affix: true
         },
       },
     ],
+  },
+  {
+    path: '/redirect',
+    component: Layout,
+    // hidden: true,
+    children: [
+      {
+        path: '/redirect/:path(.*)',
+        component: () => import('@/views/redirect/index')
+      }
+    ]
   },
   {
     path: '/command/technology',
@@ -169,19 +181,45 @@ export const routes = [
       },
     ],
   },
+
+  // {
+  //   path: '/error',
+  //   component: Layout,
+  //   redirect: 'noRedirect',
+  //   name: 'ErrorPages',
+  //   meta: {
+  //     title: 'Error Pages',
+  //     icon: '404',
+  //     iconType: 'el',
+  //   },
+  //   children: [
+  //     {
+  //       path: '401',
+  //       component: () => import('@/views/errorPage/401'),
+  //       name: '暂无权限',
+  //       meta: { title: '401' }
+  //     },
+  //     {
+  //       path: '404',
+  //       component: () => import('@/views/errorPage/404'),
+  //       name: '未找到',
+  //       meta: { title: '404' }
+  //     }
+  //   ]
+  // },
   {
     path: '/login',
     //name: 'login',
     component: () => import('@/views/login'),
   },
-  {
-    path: '/401',
-    component: () => import('@/views/errorPage/401'),
-  },
-  {
-    path: '/404',
-    component: () => import('@/views/errorPage/404'),
-  },
+  // {
+  //   path: '/401',
+  //   component: () => import('@/views/errorPage/401'),
+  // },
+  // {
+  //   path: '/404',
+  //   component: () => import('@/views/errorPage/404'),
+  // },
   {
     path: '*',
     redirect: '/404',

@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import user from './module/user'
 import app from './module/app'
 import tag from './module/tag'
+import tagsView from './module/tagsView'
 import getters from './getters'
 Vue.use(Vuex)
 
@@ -14,6 +15,7 @@ export default new Vuex.Store({
     user,
     app,
     tag,
+    tagsView
   },
   getters: getters,
 })

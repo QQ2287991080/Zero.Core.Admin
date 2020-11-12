@@ -1,10 +1,10 @@
 <template>
   <section class="app-main">
     <transition name="fade-transform" mode="out-in">
-      <keep-alive>
-        <router-view v-if="keepAlive"></router-view>
+      <keep-alive :include="cachedViews">
+        <router-view :key="key"></router-view>
       </keep-alive>
-      <router-view v-if="!keepAlive"></router-view>
+      <!-- <router-view :key="key" v-if="!keepAlive"></router-view> -->
     </transition>
   </section>
 </template>
@@ -20,6 +20,10 @@ export default {
       //   this.$router.push({ paht: this.$route.params.redirect });
       // }
       return this.$route.meta.keepAlive;
+    },
+
+    cachedViews() {
+      return this.$store.state.tagsView.cachedViews;
     },
     key() {
       var key = this.$route.path !== undefined ? this.$route.path : "";
