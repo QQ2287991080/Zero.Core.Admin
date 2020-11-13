@@ -18,7 +18,7 @@ export const routes = [
           icon: 'dashboard',
           iconType: 'svg',
           keepAlive: true,
-          affix: true
+          affix: true,
         },
       },
     ],
@@ -30,9 +30,9 @@ export const routes = [
     children: [
       {
         path: '/redirect/:path(.*)',
-        component: () => import('@/views/redirect/index')
-      }
-    ]
+        component: () => import('@/views/redirect/index'),
+      },
+    ],
   },
   {
     path: '/command/technology',
@@ -212,14 +212,14 @@ export const routes = [
     //name: 'login',
     component: () => import('@/views/login'),
   },
-  // {
-  //   path: '/401',
-  //   component: () => import('@/views/errorPage/401'),
-  // },
-  // {
-  //   path: '/404',
-  //   component: () => import('@/views/errorPage/404'),
-  // },
+  {
+    path: '/401',
+    component: () => import('@/views/errorPage/401'),
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/errorPage/404'),
+  },
   {
     path: '*',
     redirect: '/404',

@@ -6,8 +6,8 @@
     <div :class="{ hasTagsView: needTagsView }" class="main-container">
       <div class="fixed-header">
         <main-header />
-        <!-- <tags /> -->
-        <tags-view />
+        <tags />
+        <!-- <tags-view /> -->
       </div>
       <app-main />
     </div>

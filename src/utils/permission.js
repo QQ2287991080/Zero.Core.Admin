@@ -16,13 +16,7 @@ router.beforeEach(async (to, from, next) => {
       next('/')
     } else {
       if (!store.getters.userName) {
-        store.dispatch('getUserInfo').then((res) => {
-          let index = store.getters.menuUrls.indexOf(to.path)
-          if (index < 0) {
-            window.location = '#/401'
-            return
-          }
-        })
+        store.dispatch('getUserInfo').then((res) => {})
       }
       next()
     }

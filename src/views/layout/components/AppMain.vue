@@ -1,9 +1,13 @@
 <template>
   <section class="app-main">
     <transition name="fade-transform" mode="out-in">
-      <keep-alive :include="cachedViews">
+      <!-- <keep-alive :include="cachedViews">
+        <router-view :key="key"></router-view>
+      </keep-alive> -->
+      <keep-alive v-if="keepAlive">
         <router-view :key="key"></router-view>
       </keep-alive>
+      <router-view v-else :key="key"></router-view>
       <!-- <router-view :key="key" v-if="!keepAlive"></router-view> -->
     </transition>
   </section>
@@ -14,19 +18,29 @@ export default {
   name: "AppMain",
   computed: {
     keepAlive() {
-      // console.log(this.$route);
-      // if (this.$route.name === "empty") {
-      //   console.log(this.$route.params.redirect);
-      //   this.$router.push({ paht: this.$route.params.redirect });
-      // }
       return this.$route.meta.keepAlive;
     },
 
     cachedViews() {
       return this.$store.state.tagsView.cachedViews;
     },
+    option() {
+      return this.$store.state.tag.option;
+    },
     key() {
       var key = this.$route.path !== undefined ? this.$route.path : "";
+      // let index = this.$store.getters.options.indexOf((f) => f.path === key);
+      // console.log(index);
+      // var white = ["/dashboard", "/"];
+      // //&& white.indexOf(key) < 0
+      // if (index < 0) {
+      //   this.$nextTick(() => {
+      //     this.$router.replace({
+      //       path: "/401",
+      //     });
+      //   });
+      // }
+
       return key;
     },
   },
