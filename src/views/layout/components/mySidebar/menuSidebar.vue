@@ -107,6 +107,13 @@ export default {
       if (flag) {
         //添加
         store.dispatch("addTab", option);
+        this.$nextTick(() => {
+          this.$router.replace({
+            path: "/redirect" + option.path,
+          });
+        });
+      } else {
+        console.log("not in store");
       }
     },
   },

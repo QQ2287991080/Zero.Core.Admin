@@ -97,6 +97,14 @@ export default {
     refresh() {
       //this.$store.dispatch("deleteTab", this.tagIndex);
       const fullPath = this.tagIndex;
+      this.redirectFun(fullPath);
+      // this.$nextTick(() => {
+      //   this.$router.replace({
+      //     path: "/redirect" + fullPath,
+      //   });
+      // });
+    },
+    redirectFun(fullPath) {
       this.$nextTick(() => {
         this.$router.replace({
           path: "/redirect" + fullPath,
@@ -106,9 +114,8 @@ export default {
     //关闭
     close() {
       let all = this.options;
-      let last = all.slice(-1);
       store.dispatch("deleteTab", this.tagIndex);
-      //this.$router.push({ path: last.path });
+      //var last = all.pop();
     },
     //关闭其他
     closeOther() {
