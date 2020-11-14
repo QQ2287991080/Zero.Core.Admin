@@ -59,15 +59,24 @@ export default {
   methods: {
     //获取日志信息
     getdatalist: function () {
-      sendToClient()
-        .then((res) => {})
-        .catch((err) => {});
+      open();
+      setTimeout(() => {
+        sendToClient()
+          .then((res) => {
+            console.log(err);
+            close();
+          })
+          .catch((err) => {
+            close();
+          });
+      }, 1500);
     },
   },
   computed: {},
   mounted: function () {
     let thisVue = this;
     let url = process.env.VUE_APP_BASE_API + "/chathub";
+    //let url = "http://localhost:1201/chathub";
     this.connection = new signalR.HubConnectionBuilder()
       .withUrl(url, {
         skipNegotiation: true,
@@ -76,17 +85,35 @@ export default {
       .configureLogging(signalR.LogLevel.Information)
       .build();
 
+    // this.connection = new signalR.HubConnectionBuilder()
+    //   .withUrl(url, {
+    //     skipNegotiation: true,
+    //     transport: signalR.HttpTransportType.WebSockets,
+    //   })
+    //   .configureLogging(signalR.LogLevel.Information)
+    //   .build();
+    if (this.connection === "") {
+      console.log("this connection is null");
+    }
+
     this.connection.start();
+    console.log("connected ok");
     //连接日志发送事件
     this.connection.on("ReceiveLog", function (message) {
+      console.log(message);
       thisVue.tableData = message;
     });
+
+    // try {
+
+    // } catch {
+    //   console.log(err);
+    // }
   },
   created() {
     //初始化表格数据
-    open();
+
     this.getdatalist();
-    close();
   },
 };
 </script>
