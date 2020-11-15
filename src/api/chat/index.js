@@ -18,3 +18,15 @@ export function sendToClient(date) {
     params: { date },
   })
 }
+
+/**
+ * 手动给后端抛出一个错误信息
+ * @param {信息}} message
+ */
+export function setError(message) {
+  return request({
+    url: '/api/test/setErr',
+    method: 'get',
+    params: { message: message },
+  })
+}
