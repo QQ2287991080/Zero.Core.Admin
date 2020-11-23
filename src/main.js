@@ -14,7 +14,10 @@ import './utils/permission'
 import './icons/index'
 import './setup/ThirdUI'
 import '@/styles/index.scss'
-
+//粒子特效
+import VueParticles from 'vue-particles'
+Vue.use(VueParticles)
+//复制插件
 import VueCropper from 'vue-cropper'
 Vue.use(VueCropper)
 //#endregion

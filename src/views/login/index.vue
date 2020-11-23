@@ -8,7 +8,6 @@
         ref="loginForm"
         label-width="100px"
       >
-        <!-- @keyup.native="clearTrim('userName')"  禁用空格键-->
         <el-form-item label="用户名" prop="userName">
           <el-input v-model="loginForm.userName"></el-input>
         </el-form-item>
@@ -26,7 +25,6 @@
             @click="submitForm('loginForm')"
             >登录</el-button
           >
-          <!-- <el-button @click="resetForm('loginForm')">重置</el-button> -->
         </el-form-item>
       </el-form>
       <div style="text-align: center">
@@ -34,6 +32,24 @@
         <p>游 客：test001 密码：123456</p>
       </div>
     </div>
+    <vue-particles
+      :particleOpacity="0.7"
+      :particlesNumber="60"
+      shapeType="circle"
+      :particleSize="4"
+      linesColor="#fff"
+      :linesWidth="1"
+      :lineLinked="true"
+      :lineOpacity="0.4"
+      :linesDistance="150"
+      :moveSpeed="2"
+      :hoverEffect="true"
+      hoverMode="grab"
+      :clickEffect="true"
+      clickMode="push"
+      class="lizi"
+    >
+    </vue-particles>
   </div>
 </template>
 
@@ -145,22 +161,24 @@ export default {
 
 <style lang="scss" scoped>
 .login-container {
+  background-image: linear-gradient(-180deg, #1a1454 0%, #0e81a5 100%);
+  /*background-image: url("../images/bg_login.png");*/
+  background-repeat: no-repeat;
   height: 100%; //vh vm视窗大小，根据浏览器窗口大小计算位置
   width: 100%;
   overflow: hidden;
   // background-image: url("../../assets/login-bgp.jpg");
-  //background-size: cover; //图片自适应
+  background-size: cover; //图片自适应
   //background-color: transparent; //如果图片没加载出来就默认背景颜色
   // position: relative;
-  // background-color: red;
   .login-form {
     // background-color: white;
-    position: relative; //相对定位
+    position: absolute; //相对定位
     border: 1px solid gray;
     width: 380px;
     height: 300px;
     // top: 25%;
-    // left: 35%;
+    left: 40%;
     //padding: 160px 35px 0;
     margin: 0 auto;
     box-shadow: 0px 0px 10px Violet;
