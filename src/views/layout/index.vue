@@ -2,7 +2,9 @@
 <template>
   <div :class="classObj" class="app-wrapper">
     <!-- <img :src="menuImg" @click="ChangeCollapse" /> -->
-    <sidebar class="sidebar-container" />
+
+    <sidebarAdmin v-if="isSuperAdmin" class="sidebar-container" />
+    <sidebar v-else class="sidebar-container" />
     <div :class="{ hasTagsView: needTagsView }" class="main-container">
       <div class="fixed-header">
         <main-header />
@@ -21,7 +23,7 @@
 
 <script>
 import appMain from "@/views/layout/components/AppMain"; //页面布局的右侧区域
-//import sidebar from "@/views/layout/components/sidebar"; //页面布局的左侧菜单
+import sidebarAdmin from "@/views/layout/components/sidebar"; //页面布局的左侧菜单
 import sidebar from "../layout/components/mySidebar/index"; //动态菜单
 import mainHeader from "../layout/components/header/mainHeader"; //头部
 import mainTags from "../layout/components/header/mainTags"; //标签
@@ -38,6 +40,7 @@ export default {
     mainTags,
     tags,
     TagsView,
+    sidebarAdmin,
   },
   data() {
     return {
@@ -111,6 +114,9 @@ export default {
       set(val) {
         store.dispatch("avatarMenuVisible", false);
       },
+    },
+    isSuperAdmin() {
+      return store.getters.superAdmin;
     },
   },
   watch: {

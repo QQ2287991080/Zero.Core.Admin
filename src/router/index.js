@@ -87,6 +87,27 @@ export const routes = [
     ],
   },
   {
+    path: '',
+    component: Layout,
+    meta: {
+      title: '任务管理',
+      icon: 's-flag',
+      iconType: 'el',
+    },
+    children: [
+      {
+        path: '/jobManager',
+        component: () => import('@/views/jobs'),
+        meta: {
+          title: '任务管理',
+          icon: 's-flag',
+          iconType: 'el',
+          keepAlive: true,
+        },
+      },
+    ],
+  },
+  {
     path: '/system',
     component: Layout,
     meta: {

@@ -39,7 +39,9 @@ export default {
     },
     routes() {
       //返回菜单
-      return this.$router.options.routes;
+      return this.$router.options.routes.filter(
+        (a) => a.meta != null && a.name != "empty"
+      );
     },
   },
 };
