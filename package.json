@@ -14,7 +14,7 @@
     "core-js": "^3.6.5",
     "element-ui": "^2.13.2",
     "js-cookie": "^2.2.1",
-    "qs": "^6.9.4",
+    "qs": "^6.9.7",
     "svg-sprite-loader": "^5.0.0",
     "vue": "^2.6.11",
     "vue-cropper": "^0.5.5",
